@@ -110,7 +110,7 @@ export default function Home() {
             {error && <p className={styles.error}>{error}</p>}
             
             <button type="submit" className={styles.joinButton}>
-              JOIN WAITLIST
+              JOIN NOW
             </button>
           </form>
         </div>
