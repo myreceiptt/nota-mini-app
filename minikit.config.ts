@@ -22,12 +22,11 @@ export const minikitConfig = {
   // Bagian ini akan diubah jadi manifest "frame" oleh withValidManifest()
   miniapp: {
     version: "1",
-    name: "NOTA Mini App",
-    subtitle: "A small NOTA to hold your day.",
+    name: "My Receipt of Today",
+    subtitle: "A small receipt to hold today.", // 30 chars ✅
     description:
-      "An experimental NOTA Mini App by Prof. NOTA that surfaces short reflective lines and small onchain receipts inside Base and Farcaster.",
+      "My Receipt of Today is an experimental Mini App by Prof. NOTA that surfaces short reflective lines and small onchain receipts inside Base App and Farcaster.",
 
-    // Sesuaikan dengan file yang memang ada di /public
     screenshotUrls: [`${ROOT_URL}/screenshot.jpeg`],
     iconUrl: `${ROOT_URL}/icon.png`,
     imageUrl: `${ROOT_URL}/image.jpeg`,
@@ -35,19 +34,19 @@ export const minikitConfig = {
     splashImageUrl: `${ROOT_URL}/splash.png`,
     splashBackgroundColor: "#0a0b0d",
 
-    buttonTitle: "Open NOTA Mini App",
+    buttonTitle: "Open a Receipt for Today",
     castShareUrl: `${ROOT_URL}/`,
 
     homeUrl: ROOT_URL,
     webhookUrl: `${ROOT_URL}/api/webhook`,
 
     primaryCategory: "education",
-    tags: ["nota", "reflection", "base", "prof-nota"],
+    tags: ["my-receipt-of-today", "nota", "reflection", "base", "prof-nota"],
 
-    tagline: "Your small daily NOTA on Base.",
-    ogTitle: "NOTA Mini App",
+    tagline: "Your onchain receipt of today.",
+    ogTitle: "My Receipt of Today",
     ogDescription:
-      "Open the NOTA Mini App on Base and pull a short line as your onchain receipt of the day.",
+      "Open My Receipt of Today on Base and pull a short line as your onchain receipt of the day.",
     ogImageUrl: `${ROOT_URL}/og.png`,
   },
 

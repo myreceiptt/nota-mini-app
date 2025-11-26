@@ -36,7 +36,7 @@ export default function Home() {
   const handleShare = async () => {
     try {
       setIsSharing(true);
-      const text = `NOTA of the day:\n\n"${currentNota}"`;
+      const text = `My Receipt of Today:\n\n“${currentNota}”\n\n— pulled from My Receipt of Today Mini App, OiOi.`;
 
       const result = await composeCastAsync({
         text,
@@ -57,16 +57,12 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <button className={styles.closeButton} type="button">
-        ✕
-      </button>
-
       <div className={styles.content}>
-        <div className={styles.waitlistForm}>
+        <div className={styles.shell}>
           <h1 className={styles.title}>{minikitConfig.miniapp.name}</h1>
 
           <p className={styles.subtitle}>
-            OiOi, {displayName}. Here&apos;s a small NOTA for today — a short
+            OiOi, {displayName}! Here&apos;s a small receipt for today — a short
             line to nudge how you see your day onchain and off.
           </p>
 
@@ -89,7 +85,7 @@ export default function Home() {
               onClick={handleShare}
               disabled={isSharing}
             >
-              {isSharing ? "Sharing..." : "Share to Farcaster"}
+              {isSharing ? "Sharing..." : "Share My Receipt"}
             </button>
           </div>
         </div>

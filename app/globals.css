@@ -1,13 +1,13 @@
 @layer base {
   :root {
     --background: #ffffff;
-    --foreground: #171717;
+    --foreground: #111111;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
       --background: #0a0a0a;
-      --foreground: #ededed;
+      --foreground: #f5f5f5;
     }
   }
 
@@ -20,24 +20,25 @@
   body {
     color: var(--foreground);
     background: var(--background);
-    font-family: var(--font-inter), sans-serif;
+    /* gunakan font console: Source Code Pro jadi default */
+    font-family: var(--font-source-code-pro), monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   code {
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 6px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    border: 1px solid #dddddd;
     font-family: var(--font-source-code-pro), monospace;
     font-size: 0.875rem;
-    padding: 0.25rem 0.5rem calc(0.25rem + 2px);
+    padding: 0.2rem 0.4rem 0.3rem;
   }
 
   @media (prefers-color-scheme: dark) {
     code {
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #111111;
+      border: 1px solid #474747;
     }
   }
 
