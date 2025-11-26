@@ -14,20 +14,21 @@ export const minikitConfig = {
 
   accountAssociation: {
     header:
-      "eyJmaWQiOjUxNzc5OCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDdlOUQzNUI5ZEI1REVhNjFGODVGNEYxNGY0Qzk3MmI3N0Q3NWE2NzQifQ",
-    // "eyJmaWQiOjUxNzc5OCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDdlOUQzNUI5ZEI1REVhNjFGODVGNEYxNGY0Qzk3MmI3N0Q3NWE2NzQifQ",
-    payload: "eyJkb21haW4iOiJtaW5pLmVuZGhvbmVzYS5jb20ifQ",
-    // "eyJkb21haW4iOiJuZXctbWluaS1hcHAtcXVpY2tzdGFydC10aHJlZS1kZWx0YS52ZXJjZWwuYXBwIn0",
+      // "eyJmaWQiOjUxNzc5OCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDdlOUQzNUI5ZEI1REVhNjFGODVGNEYxNGY0Qzk3MmI3N0Q3NWE2NzQifQ",
+    "eyJmaWQiOjUxNzc5OCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDdlOUQzNUI5ZEI1REVhNjFGODVGNEYxNGY0Qzk3MmI3N0Q3NWE2NzQifQ",
+    payload: 
+    // "eyJkb21haW4iOiJtaW5pLmVuZGhvbmVzYS5jb20ifQ",
+    "eyJkb21haW4iOiJuZXctbWluaS1hcHAtcXVpY2tzdGFydC10aHJlZS1kZWx0YS52ZXJjZWwuYXBwIn0",
     signature:
-      "4gQV838aFcU0nYVQtpO84hRY/jOIZ40mz/Mvpbbi/kVdVLloM58+WdfeZfKJ/0rKHR92JwOWzw1tdggB13w64Bw=",
-    // "ofQQmDdj1R4UA7eVEmYfu6Xp/WjJWCZOAc4u6RYMwtcaQIBUqkTcGkFiJUuVGhlul0qx3oGqJUGdCD+7QC5pVBw=",
+      // "4gQV838aFcU0nYVQtpO84hRY/jOIZ40mz/Mvpbbi/kVdVLloM58+WdfeZfKJ/0rKHR92JwOWzw1tdggB13w64Bw=",
+    "ofQQmDdj1R4UA7eVEmYfu6Xp/WjJWCZOAc4u6RYMwtcaQIBUqkTcGkFiJUuVGhlul0qx3oGqJUGdCD+7QC5pVBw=",
   },
 
   // 👉 bagian ini yang akan diubah jadi manifest "frame" oleh withValidManifest()
   miniapp: {
     version: "1",
     name: "NOTA Mini App",
-    subtitle: "Playful NOTA-style reflections on Base and Farcaster",
+    subtitle: "Playful NOTA-style reflections",
     description:
       "An experimental NOTA Mini App by Prof. NOTA that surfaces short reflective lines and small onchain experiences inside Base and Farcaster.",
 
