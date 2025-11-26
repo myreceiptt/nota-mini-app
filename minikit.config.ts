@@ -32,12 +32,12 @@ export const minikitConfig = {
 
     // sesuaikan dengan file di /public.
     // Kalau kamu punya icon.png / image.png / splash.png, pakai pola ini:
-    screenshotUrls: [`${ROOT_URL}/image.png`],
+    screenshotUrls: [`${ROOT_URL}/screenshot.jpeg`],
     iconUrl: `${ROOT_URL}/icon.png`,
-    imageUrl: `${ROOT_URL}/image.png`,
-    heroImageUrl: `${ROOT_URL}/image.png`,
+    imageUrl: `${ROOT_URL}/image.jpeg`,
+    heroImageUrl: `${ROOT_URL}/hero.jpg`,
     splashImageUrl: `${ROOT_URL}/splash.png`,
-    splashBackgroundColor: "#111111",
+    splashBackgroundColor: "#474747",
     buttonTitle: "Open NOTA",
     castShareUrl: `${ROOT_URL}/`,
 
@@ -51,6 +51,6 @@ export const minikitConfig = {
     ogTitle: "NOTA Mini App",
     ogDescription:
       "A small experimental NOTA Mini App running on Base and Farcaster.",
-    ogImageUrl: `${ROOT_URL}/image.png`,
+    ogImageUrl: `${ROOT_URL}/og.png`,
   },
 } as const;
