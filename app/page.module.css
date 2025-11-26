@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-  color: white;
+  background: linear-gradient(135deg, #0a0b0d 0%, #0000ff 40%, #3c8aff 100%);
+  color: #ffffff;
   position: relative;
 }
 
@@ -12,8 +12,8 @@
   top: 1rem;
   right: 1rem;
   background: none;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -22,12 +22,12 @@
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .closeButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .content {
@@ -41,30 +41,54 @@
 
 .waitlistForm {
   text-align: center;
-  max-width: 600px;
+  max-width: 640px;
   width: 100%;
 }
 
 .title {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-bottom: 2rem;
-  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #eef0f3 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 3rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  color: rgba(238, 240, 243, 0.9);
   font-weight: 300;
 }
 
+.notaCard {
+  text-align: left;
+  margin: 0 auto 2rem;
+  padding: 1.5rem 1.75rem;
+  max-width: 640px;
+  border-radius: 18px;
+  background: rgba(10, 11, 13, 0.78);
+  border: 1px solid rgba(238, 240, 243, 0.18);
+  backdrop-filter: blur(14px);
+}
+
+.notaText {
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* disimpan kalau nanti mau dipakai lagi */
 .form {
   display: flex;
   flex-direction: column;
@@ -73,54 +97,52 @@
   width: 100%;
 }
 
-.emailInput {
-  width: 100%;
-  max-width: 400px;
-  padding: 1rem 1.5rem;
-  font-size: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  color: white;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.emailInput::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.emailInput:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-}
-
 .error {
-  color: #ff6b6b;
+  color: #fc401f;
   font-size: 0.9rem;
   margin: 0;
 }
 
 .joinButton {
-  background: #f7d954;
-  color: #000;
+  background: #ffd12f;
+  color: #000000;
   border: none;
-  padding: 1rem 3rem;
-  font-size: 1rem;
+  padding: 0.9rem 2.4rem;
+  font-size: 0.95rem;
   font-weight: 700;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 1rem;
-  box-shadow: 0 4px 20px rgba(247, 217, 84, 0.3);
+  letter-spacing: 0.06em;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
 }
 
-.joinButton:hover {
-  background: #f5d73a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(247, 217, 84, 0.4);
+.joinButton:hover:not(:disabled) {
+  background: #ffdf5a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.joinButton:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.secondaryButton {
+  background: transparent;
+  border-radius: 12px;
+  border: 1px solid #eef0f3;
+  color: #eef0f3;
+  padding: 0.9rem 2.1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondaryButton:hover {
+  border-color: #3c8aff;
+  color: #ffffff;
+  background: rgba(0, 0, 255, 0.16);
 }

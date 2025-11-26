@@ -5,7 +5,6 @@ const client = createClient();
 
 // Helper function to determine the correct domain for JWT verification
 function getUrlHost(request: NextRequest): string {
-  // First try to get the origin from the Origin header (most reliable for CORS requests)
   const origin = request.headers.get("origin");
   if (origin) {
     try {
@@ -16,13 +15,11 @@ function getUrlHost(request: NextRequest): string {
     }
   }
 
-  // Fallback to Host header
   const host = request.headers.get("host");
   if (host) {
     return host;
   }
 
-  // Final fallback to environment variables (your original logic)
   let urlValue: string;
   if (process.env.VERCEL_ENV === "production") {
     urlValue = process.env.NEXT_PUBLIC_URL!;
@@ -37,19 +34,16 @@ function getUrlHost(request: NextRequest): string {
 }
 
 export async function GET(request: NextRequest) {
-  // Because we're fetching this endpoint via `sdk.quickAuth.fetch`,
-  // if we're in a mini app, the request will include the necessary `Authorization` header.
+  // When this endpoint is fetched via sdk.quickAuth.fetch inside a Mini App,
+  // the request includes the necessary Authorization header.
   const authorization = request.headers.get("Authorization");
 
-  // Here we ensure that we have a valid token.
   if (!authorization || !authorization.startsWith("Bearer ")) {
     return NextResponse.json({ message: "Missing token" }, { status: 401 });
   }
 
   try {
-    // Now we verify the token. `domain` must match the domain of the request.
-    // In our case, we're using the `getUrlHost` function to get the domain of the request
-    // based on the Vercel environment. This will vary depending on your hosting provider.
+    // Verify the token. `domain` must match the domain of the incoming request.
     const payload = await client.verifyJwt({
       token: authorization.split(" ")[1] as string,
       domain: getUrlHost(request),
@@ -57,10 +51,10 @@ export async function GET(request: NextRequest) {
 
     console.log("payload", payload);
 
-    // If the token was valid, `payload.sub` will be the user's Farcaster ID.
     const userFid = payload.sub;
 
-    // Return user information for your waitlist application
+    // Return user information for the NOTA Mini App.
+    // You can use this data to gate features, show receipts, or persist user state.
     return NextResponse.json({
       success: true,
       user: {
@@ -69,7 +63,6 @@ export async function GET(request: NextRequest) {
         expiresAt: payload.exp,
       },
     });
-
   } catch (e) {
     if (e instanceof Errors.InvalidTokenError) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
