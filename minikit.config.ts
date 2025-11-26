@@ -38,6 +38,7 @@ export const minikitConfig = {
     heroImageUrl: `${ROOT_URL}/image.png`,
     splashImageUrl: `${ROOT_URL}/splash.png`,
     splashBackgroundColor: "#111111",
+    buttonTitle: "Open NOTA",
 
     homeUrl: ROOT_URL,
     webhookUrl: `${ROOT_URL}/api/webhook`,
