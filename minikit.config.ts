@@ -27,7 +27,7 @@ export const minikitConfig = {
   miniapp: {
     version: "1",
     name: "NOTA Mini App",
-    subtitle: "Playful NOTA-style reflections on Base & Farcaster",
+    subtitle: "Playful NOTA-style reflections on Base and Farcaster",
     description:
       "An experimental NOTA Mini App by Prof. NOTA that surfaces short reflective lines and small onchain experiences inside Base and Farcaster.",
 
