@@ -39,6 +39,7 @@ export const minikitConfig = {
     splashImageUrl: `${ROOT_URL}/splash.png`,
     splashBackgroundColor: "#111111",
     buttonTitle: "Open NOTA",
+    castShareUrl: `${ROOT_URL}/`,
 
     homeUrl: ROOT_URL,
     webhookUrl: `${ROOT_URL}/api/webhook`,
@@ -46,7 +47,7 @@ export const minikitConfig = {
     primaryCategory: "education",
     tags: ["nota", "reflection", "education", "experimental"],
 
-    tagline: "",
+    tagline: "Reflect with NOTA",
     ogTitle: "NOTA Mini App",
     ogDescription:
       "A small experimental NOTA Mini App running on Base and Farcaster.",
