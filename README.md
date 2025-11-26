@@ -1,8 +1,8 @@
 # NOTA Mini App
 
-NOTA Mini App is a small experimental Mini App for the Base app and Farcaster, built by Prof. NOTA as a sandbox for ideas, jokes, and gentle onchain experiments.
+NOTA Mini App is an experimental Mini App for the Base app and Farcaster, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.
 
-The current default example is a simple “NOTA fortune” experience: a lightweight Mini App that can greet the user and surface short reflective lines (“NOTA of the day”) inside the Base app and Farcaster. Over time, this repository can evolve into a playground for more serious NOTA-themed flows.
+The current default example is a simple “NOTA fortune” experience: a lightweight Mini App that can greet the user and surface short reflective lines (“NOTA of the day”) inside the Base app and Farcaster. Over time, this repository can evolve into a playground for NOTA-themed flows maintained by Prof. NOTA.
 
 This project uses:
 
@@ -14,14 +14,14 @@ This project uses:
 
 ## Prerequisites
 
-To use and extend this project, you should have:
+To use and extend this project in the way it was designed, you should have:
 
 - A **Base app** account
 - A **Farcaster** account
 - A **Vercel** account (for hosting)
 - A **Coinbase Developer Platform** (CDP) API key for OnchainKit / MiniKit
 
-These are not required just to explore the code locally, but they are needed once you want to ship the Mini App publicly.
+These are not required just to explore the code locally on your own machine, but they are needed once you want to ship the Mini App publicly in a compliant way.
 
 ---
 
@@ -155,7 +155,7 @@ When you are ready to formally associate your NOTA Mini App with your Farcaster 
 ### 1. Generate an `accountAssociation` object
 
 1. Navigate to the Farcaster Mini App manifest tool in your browser.
-2. Enter your deployed Mini App domain (for example: `your-vercel-project-name.vercel.app`).
+2. Enter your deployed Mini App domain (for example: `mini.endhonesa.com` or your Vercel URL).
 3. Use your Farcaster wallet to sign the manifest as instructed.
 4. Copy the generated `accountAssociation` object (it contains `header`, `payload`, and `signature` fields).
 
@@ -188,47 +188,29 @@ This will publish the updated manifest.
 
 ---
 
-## Testing and Publishing
-
-### 1. Preview your Mini App
-
-Go to the Base Mini App preview tool in your browser and:
-
-1. Enter your Mini App URL to see how the embed looks and test the launch flow.
-2. Use the “Account association” view to confirm that your signed association is valid.
-3. Use the “Metadata” view to verify that the title, description, icons, and other fields are set the way you expect.
-
-### 2. Publish to the Base app
-
-To make the NOTA Mini App discoverable inside the Base app:
-
-1. Open the Base app.
-2. Create a new post that contains the URL of your Mini App.
-3. The Base app should recognise the URL, show the embed, and allow others to launch the Mini App.
-
----
-
 ## Roadmap / Ideas
 
-This repository is intentionally small and opinionated so that it can serve as a playground. Possible future experiments include:
+This repository is intentionally small and opinionated so that it can serve as a playground for NOTA experiments maintained by Prof. NOTA and Prof. NOTA Inc.
+
+Possible future experiments include:
 
 - Alternative NOTA experiences (e.g. “NOTA of the day”, reflections, prompts)
 - Simple onchain actions via Base Accounts (minting, stamping, proof-of-presence)
-- Small utilities around $myreceipt / other Prof. NOTA narratives
+- Small utilities around $myreceipt or other Prof. NOTA narratives
 
-You are free to fork, remix, and repurpose this code for your own experiments.
+Any actual use, remix, or redistribution of this codebase must follow the terms described in the `LICENSE` file. If you are interested in collaborations or specific permissions, please reach out using the contact information in `LICENSE`.
 
 ---
 
 ## Disclaimer
 
-This repository started from a public demo template intended for learning how to build Mini Apps for the Base app and Farcaster. It is provided for **educational and experimental purposes only.**
+This repository started from a public demo template intended for learning how to build Mini Apps for the Base app and Farcaster. It is provided for **educational and experimental purposes** within the boundaries defined in the `LICENSE` file.
 
 - There is **no official token, cryptocurrency, or investment product** associated with this repository, with NOTA Mini App, or with the examples shown here.
 - Any external token, app, or social account claiming to be “officially” tied to Coinbase, Base, or to this demo should be treated with caution and independently verified.
 - Never sign transactions or connect wallets to untrusted sites.
 
-For official information about Base and its developer ecosystem, please refer to:
+License, permitted uses, and restrictions are defined in the `LICENSE` file at the root of this repository. For official information about Base and its developer ecosystem, please refer to:
 
 - [https://base.org](https://base.org)
 - [https://docs.base.org](https://docs.base.org)

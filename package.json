@@ -2,6 +2,27 @@
   "name": "nota-mini-app",
   "version": "1.1.1",
   "private": true,
+  "description": "NOTA Mini App is an experimental Mini App for the Base app and Farcaster, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.",
+  "author": "Prof. NOTA",
+  "license": "UNLICENSED - SEE LICENSE IN LICENSE",
+  "receipt": {
+    "publisher": "Prof. NOTA Inc."
+  },
+  "homepage": "https://mini.endhonesa.com",
+  "keywords": [
+    "nextjs",
+    "typescript",
+    "onchainkit",
+    "minikit",
+    "farcaster",
+    "mini app",
+    "base app",
+    "web3",
+    "blockchain",
+    "nota",
+    "prof. nota",
+    "myreceipt"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -28,5 +49,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22.11.0"
   }
 }
