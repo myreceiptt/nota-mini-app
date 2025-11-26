@@ -53,4 +53,7 @@ export const minikitConfig = {
       "A small experimental NOTA Mini App running on Base and Farcaster.",
     ogImageUrl: `${ROOT_URL}/og.png`,
   },
+  baseBuilder: {
+    ownerAddress: "0x35b68340C61F26147b7B22f5Ab931892BD9358B3",
+  },
 } as const;
