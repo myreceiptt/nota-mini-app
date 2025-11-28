@@ -48,6 +48,7 @@ export const minikitConfig = {
     ogDescription:
       "Open MyReceipt on Base or Farcaster and pull a short line as your onchain receipt of the day.",
     ogImageUrl: `${ROOT_URL}/og.png`,
+    noindex: false,
   },
 
   baseBuilder: {
