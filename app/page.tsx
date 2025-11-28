@@ -115,7 +115,7 @@ export default function Home() {
               onClick={handleShare}
               disabled={isSharing}
             >
-              {isSharing ? "Sharing..." : "Share My Receipt"}
+              {isSharing ? "Sharing..." : "Share MyReceipt"}
             </button>
           </div>
         </div>
