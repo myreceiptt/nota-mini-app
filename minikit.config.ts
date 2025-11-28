@@ -46,7 +46,7 @@ export const minikitConfig = {
     tagline: "Your onchain receipt of today.",
     ogTitle: "MyReceipt",
     ogDescription:
-      "Open MyReceipt on Base or Farcaster and pull a short line as your onchain receipt of the day.",
+      "Open MyReceipt on Base or Farcaster and pull a short line as your onchain receipt of the day.", // 100 chars ✅
     ogImageUrl: `${ROOT_URL}/og.png`,
     noindex: false,
   },

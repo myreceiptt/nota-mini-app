@@ -46,7 +46,7 @@ export default function Home() {
   const handleShare = async () => {
     try {
       setIsSharing(true);
-      const text = `My Receipt of Today:\n\n“${currentNota}”\n\n— pulled from My Receipt of Today Mini App on Base.\n\n#OiOi #myreceipt #base #notaMiniApp`;
+      const text = `MyReceipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App on Base.\n\n$OiOi $myreceipt $ENDHONESA #base #notaMiniApp`;
 
       const result = await composeCastAsync({
         text,
@@ -91,7 +91,7 @@ export default function Home() {
 
             <div className={styles.notaFooter}>
               <Image
-                src="/nota-pfp.png" // taruh file ini di /public
+                src="/nota-pfp.png"
                 alt="Prof. NOTA Inc."
                 width={96}
                 height={96}
