@@ -22,10 +22,10 @@ export const minikitConfig = {
   // Bagian ini akan diubah jadi manifest "frame" oleh withValidManifest()
   miniapp: {
     version: "1",
-    name: "My Receipt of Today",
+    name: "MyReceipt",
     subtitle: "A small receipt to hold today.", // 30 chars ✅
     description:
-      "My Receipt of Today is an experimental Mini App by Prof. NOTA that surfaces short reflective lines and small onchain receipts inside Base App and Farcaster.",
+      "MyReceipt is an experimental Mini App by Prof. NOTA that surfaces short reflective lines and small onchain receipts inside Base App and Farcaster.",
 
     screenshotUrls: [`${ROOT_URL}/screenshot.jpeg`],
     iconUrl: `${ROOT_URL}/icon.png`,
@@ -44,9 +44,9 @@ export const minikitConfig = {
     tags: ["my-receipt-of-today", "nota", "reflection", "base", "prof-nota"],
 
     tagline: "Your onchain receipt of today.",
-    ogTitle: "My Receipt of Today",
+    ogTitle: "MyReceipt",
     ogDescription:
-      "Open My Receipt of Today on Base and pull a short line as your onchain receipt of the day.",
+      "Open MyReceipt Mini App on Base or Farcaster and pull a short line as your onchain receipt of the day.",
     ogImageUrl: `${ROOT_URL}/og.png`,
   },
 

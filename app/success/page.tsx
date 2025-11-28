@@ -54,13 +54,13 @@ export default function Success() {
           <h1 className={styles.title}>Your receipt is ready.</h1>
 
           <p className={styles.subtitle}>
-            You&apos;ve just stepped into My Receipt of Today Mini App.
+            You&apos;ve just stepped into MyReceipt Mini App.
             <br />
             Share it as a small onchain receipt of how you see today.
           </p>
 
           <button onClick={handleShare} className={styles.shareButton}>
-            Share My Receipt
+            Share MyReceipt
           </button>
         </div>
       </div>

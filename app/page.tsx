@@ -46,7 +46,7 @@ export default function Home() {
   const handleShare = async () => {
     try {
       setIsSharing(true);
-      const text = `My Receipt of Today:\n\n“${currentNota}”\n\n— pulled from My Receipt of Today Mini App, OiOi.`;
+      const text = `My Receipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App, OiOi.`;
 
       const result = await composeCastAsync({
         text,
@@ -95,7 +95,7 @@ export default function Home() {
               onClick={handleShare}
               disabled={isSharing}
             >
-              {isSharing ? "Sharing..." : "Share My Receipt"}
+              {isSharing ? "Sharing..." : "Share MyReceipt"}
             </button>
           </div>
         </div>
