@@ -6,11 +6,21 @@ import { minikitConfig } from "../minikit.config";
 import styles from "./page.module.css";
 
 const NOTA_LINES: string[] = [
-  "We are not against the system. We just don’t pretend it’s neutral.",
-  "Your receipt is not the bill; it’s the story of how you spend yourself.",
-  "Onchain is just a mirror. What matters is the human looking into it.",
-  "Small consistent moves beat one perfect, mythical moment.",
-  "You are not late. You are right on time for your own timeline.",
+  "Her thoughts are galaxies. Her gaze, encrypted.",
+  "She folds futures in silence and speaks only when the room is ready.",
+  "You call her quiet. But the earth listens when she walks.",
+  "...some storms whisper before they strike...",
+
+  "We invested in silence, because it returns clarity.",
+  "We invested in doubt, because it returns humility.",
+
+  "You invested in traction. We invested in attention.",
+  "Let’s see who lasts longer after the noise dies down.",
+
+  "So let them fear her self-worth and flinch at her joy.",
+  "Let them drown in the echo of a woman who no longer waits.",
+  "She does not need your validation. She is not your redemption arc.",
+  "...she is her own proof...",
 ];
 
 export default function Home() {
@@ -76,7 +86,7 @@ export default function Home() {
               className={styles.secondaryButton}
               onClick={handleAnother}
             >
-              Another NOTA
+              Another Receipt
             </button>
 
             <button
