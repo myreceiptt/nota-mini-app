@@ -21,7 +21,7 @@ export const minikitConfig = {
 
   // Bagian ini akan diubah jadi manifest "frame" oleh withValidManifest()
   miniapp: {
-    version: "1",
+    version: "v1.1.11",
     name: "MyReceipt",
     subtitle: "A small receipt to hold today.", // 30 chars ✅
     description:
