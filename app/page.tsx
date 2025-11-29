@@ -320,8 +320,20 @@ export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const { composeCastAsync } = useComposeCast();
 
+  // --- helper kecil untuk ambil displayName / username ---
+  let username: string | undefined;
+
+  if (context && typeof context === "object" && "user" in context) {
+    const user = (context as { user?: { username?: string } }).user;
+    if (user?.username && user.username.trim().length > 0) {
+      username = user.username.trim();
+    }
+  }
+
   const displayName =
-    context?.user?.displayName || (context as any)?.user?.username || "OiOi";
+    (context?.user?.displayName && context.user.displayName.trim().length > 0
+      ? context.user.displayName.trim()
+      : username) || "OiOi";
 
   const [currentNota, setCurrentNota] = useState<string>("");
   const [nameUsed, setNameUsed] = useState<string>(displayName);
