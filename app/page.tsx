@@ -376,8 +376,8 @@ export default function Home() {
           <h1 className={styles.title}>{minikitConfig.miniapp.name}</h1>
 
           <p className={styles.subtitle}>
-            Hi, {displayName}. Here&apos;s a small receipt for today — a short
-            line to nudge how you see your day onchain and off.
+            Hi, <strong>{displayName}</strong>. Here&apos;s a small receipt for
+            today — a short line to nudge how you see your day onchain and off.
           </p>
 
           <div className={styles.notaCard}>
