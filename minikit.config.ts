@@ -41,7 +41,7 @@ export const minikitConfig = {
     webhookUrl: `${ROOT_URL}/api/webhook`,
 
     primaryCategory: "education",
-    tags: ["myreceipt", "nota"],
+    tags: ["myreceipt", "nota", "reflection"],
 
     tagline: "Your onchain receipt of today.",
     ogTitle: "MyReceipt",
