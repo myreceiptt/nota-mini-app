@@ -1,28 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useMiniKit, useComposeCast } from "@coinbase/onchainkit/minikit";
-import { minikitConfig } from "../minikit.config";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { minikitConfig } from "../minikit.config";
 import styles from "./page.module.css";
-
-// const NOTA_LINES: string[] = [
-//   "Her thoughts are galaxies. Her gaze, encrypted.",
-//   "She folds futures in silence and speaks only when the room is ready.",
-//   "You call her quiet. But the earth listens when she walks.",
-//   "...some storms whisper before they strike...",
-
-//   "We invested in silence, because it returns clarity.",
-//   "We invested in doubt, because it returns humility.",
-
-//   "You invested in traction. We invested in attention.",
-//   "Let’s see who lasts longer after the noise dies down.",
-
-//   "So let them fear her self-worth and flinch at her joy.",
-//   "Let them drown in the echo of a woman who no longer waits.",
-//   "She does not need your validation. She is not your redemption arc.",
-//   "...she is her own proof...",
-// ];
 
 type TemplateFn = (name: string) => string;
 
@@ -319,8 +303,9 @@ function generateReceipt(rawName?: string | null): string {
 export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const { composeCastAsync } = useComposeCast();
+  const router = useRouter();
 
-  // --- helper kecil untuk ambil displayName / username ---
+  // Helper for displayName / username
   let username: string | undefined;
 
   if (context && typeof context === "object" && "user" in context) {
@@ -339,14 +324,14 @@ export default function Home() {
   const [nameUsed, setNameUsed] = useState<string>(displayName);
   const [isSharing, setIsSharing] = useState(false);
 
-  // Mark Mini App ready
+  // Mark mini app ready
   useEffect(() => {
     if (!isFrameReady) {
       setFrameReady();
     }
   }, [isFrameReady, setFrameReady]);
 
-  // Generate receipt pertama kali & ketika nama user berubah
+  // Generate first receipt when username changes
   useEffect(() => {
     if (!currentNota || nameUsed !== displayName) {
       const next = generateReceipt(displayName);
@@ -373,6 +358,7 @@ export default function Home() {
 
       if (result?.cast) {
         console.log("Cast created successfully:", result.cast.hash);
+        router.push("/success"); // ⬅️ pindah ke halaman success
       } else {
         console.log("User cancelled the cast");
       }

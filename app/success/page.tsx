@@ -2,15 +2,16 @@
 
 import { useComposeCast } from "@coinbase/onchainkit/minikit";
 import { useRouter } from "next/navigation";
+
 import { minikitConfig } from "../../minikit.config";
 import styles from "./page.module.css";
 
 export default function Success() {
-  const router = useRouter();
   const { composeCastAsync } = useComposeCast();
+  const router = useRouter();
 
   const handleClose = () => {
-    router.push("/"); // kembali ke halaman depan
+    router.push("/"); // back to Home
   };
 
   const handleShare = async () => {
