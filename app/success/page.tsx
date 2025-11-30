@@ -2,6 +2,7 @@
 
 import { useComposeCast } from "@coinbase/onchainkit/minikit";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { minikitConfig } from "../../minikit.config";
 import styles from "./page.module.css";
@@ -11,12 +12,13 @@ export default function Success() {
   const router = useRouter();
 
   const handleClose = () => {
-    router.push("/"); // back to Home
+    // Kembali ke halaman utama untuk tarik receipt baru
+    router.push("/");
   };
 
   const handleShare = async () => {
     try {
-      const text = `I just visited ${minikitConfig.miniapp.name} Mini App and pulled a receipt for today, OiOi.`;
+      const text = `I just pulled today’s MyReceipt from ${minikitConfig.miniapp.name} Mini App on Base.\n\nA small onchain receipt for how I see today, OiOi.\n\n$OiOi $myreceipt $ENDHONESA #base #notaMiniApp`;
 
       const result = await composeCastAsync({
         text,
@@ -45,24 +47,44 @@ export default function Success() {
 
       <div className={styles.content}>
         <div className={styles.successMessage}>
-          <div className={styles.checkmark}>
-            <div className={styles.checkmarkCircle}>
-              <div className={styles.checkmarkStem}></div>
-              <div className={styles.checkmarkKick}></div>
-            </div>
+          <div className={styles.avatarWrapper}>
+            <Image
+              src="/nota-pfp.png"
+              alt="Prof. NOTA Inc."
+              width={96}
+              height={96}
+              className={styles.notaAvatar}
+            />
           </div>
 
-          <h1 className={styles.title}>Your receipt is ready.</h1>
+          <h1 className={styles.title}>MyReceipt is OnChain</h1>
 
           <p className={styles.subtitle}>
-            You&apos;ve just stepped into MyReceipt Mini App.
+            You just shared one small receipt for today.
             <br />
-            Share it as a small onchain receipt of how you see today.
+            You can pull another receipt, and keep supporting{" "}
+            <strong>Prof. NOTA Inc.</strong> by spreading your receipt and
+            staking <strong>$OiOi</strong>, <strong>$myreceipt</strong>, and{" "}
+            <strong>$ENDHONESA</strong> in your own way.
           </p>
 
-          <button onClick={handleShare} className={styles.shareButton}>
-            Share MyReceipt
-          </button>
+          <div className={styles.actions}>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={handleClose}
+            >
+              Pull Another Receipt
+            </button>
+
+            <button
+              type="button"
+              onClick={handleShare}
+              className={styles.shareButton}
+            >
+              Share MyReceipt Again
+            </button>
+          </div>
         </div>
       </div>
     </div>

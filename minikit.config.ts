@@ -19,6 +19,10 @@ export const minikitConfig = {
       "4gQV838aFcU0nYVQtpO84hRY/jOIZ40mz/Mvpbbi/kVdVLloM58+WdfeZfKJ/0rKHR92JwOWzw1tdggB13w64Bw=",
   },
 
+  baseBuilder: {
+    ownerAddress: "0x35b68340C61F26147b7B22f5Ab931892BD9358B3",
+  },
+
   // Bagian ini akan diubah jadi manifest "frame" oleh withValidManifest()
   miniapp: {
     version: "1",
@@ -49,9 +53,5 @@ export const minikitConfig = {
       "Open MyReceipt on Base or Farcaster and pull a short line as your onchain receipt of the day.", // 100 chars ✅
     ogImageUrl: `${ROOT_URL}/og.png`,
     noindex: false,
-  },
-
-  baseBuilder: {
-    ownerAddress: "0x35b68340C61F26147b7B22f5Ab931892BD9358B3",
   },
 } as const;
