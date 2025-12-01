@@ -5,10 +5,9 @@ export const runtime = "edge";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // Text yang akan ditampilkan di kartu
-  const text = searchParams.get("text") || "Your receipt of today.";
+  const textParam = searchParams.get("text") || "Your receipt of today.";
+  const name = searchParams.get("name") || "OiOi";
 
-  // Basis URL untuk ambil avatar
   const origin = new URL(request.url).origin;
   const avatarUrl = `${origin}/nota-pfp.png`;
 
@@ -19,98 +18,119 @@ export async function GET(request: Request) {
           width: "100%",
           height: "100%",
           backgroundColor: "#ffffff",
-          color: "#111111",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "flex-start",
+          justifyContent: "center",
           fontFamily: "Menlo, ui-monospace, SFMono-Regular, monospace",
-          paddingTop: 120,
-          paddingBottom: 120,
         }}
       >
-        {/* Header */}
+        {/* Kartu di tengah, dengan border jelas */}
         <div
           style={{
-            fontSize: 72,
-            fontWeight: 700,
-            letterSpacing: 6,
+            width: 900,
+            height: 1250,
+            border: "2px solid #111111",
+            borderRadius: 24,
+            backgroundColor: "#ffffff",
+            color: "#111111",
+            padding: 64,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          Prof. NOTA
-          <span
+          {/* Header */}
+          <div
             style={{
-              fontSize: 32,
-              verticalAlign: "super",
-              marginLeft: 4,
+              fontSize: 48,
+              fontWeight: 700,
+              letterSpacing: 8,
+              textAlign: "center",
             }}
           >
-            Inc.
-          </span>
-        </div>
+            Prof. NOTA
+            <span
+              style={{
+                fontSize: 24,
+                verticalAlign: "super",
+                marginLeft: 4,
+              }}
+            >
+              Inc.
+            </span>
+          </div>
 
-        <div
-          style={{
-            marginTop: 40,
-            fontSize: 40,
-            letterSpacing: 30,
-          }}
-        >
-          ...
-        </div>
-
-        {/* Body text */}
-        <div
-          style={{
-            marginTop: 80,
-            width: "70%",
-            fontSize: 40,
-            lineHeight: 1.6,
-            textAlign: "center",
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          {text}
-        </div>
-
-        {/* Hashtags */}
-        <div
-          style={{
-            marginTop: 80,
-            fontSize: 32,
-            letterSpacing: 12,
-          }}
-        >
-          $MyReceipt of $ENDHONESA, $OiOi!
-        </div>
-
-        <div
-          style={{
-            marginTop: 40,
-            fontSize: 40,
-            letterSpacing: 30,
-          }}
-        >
-          ...
-        </div>
-
-        {/* Avatar */}
-        <div
-          style={{
-            marginTop: 60,
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={avatarUrl}
-            alt="Prof. NOTA"
-            width={260}
-            height={260}
+          {/* Dots atas */}
+          <div
             style={{
-              borderRadius: 9999,
-              border: "4px solid #111111",
+              marginTop: 24,
+              fontSize: 32,
+              letterSpacing: 20,
             }}
-          />
+          >
+            ...
+          </div>
+
+          {/* Body text / receipt */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              fontSize: 40,
+              lineHeight: 1.5,
+              padding: "0 16px",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {textParam}
+          </div>
+
+          {/* Hashtags + nama */}
+          <div
+            style={{
+              marginTop: 24,
+              fontSize: 28,
+              letterSpacing: 6,
+              textAlign: "center",
+            }}
+          >
+            #{name} • #OiOi • #endhonesa
+          </div>
+
+          {/* Dots bawah */}
+          <div
+            style={{
+              marginTop: 24,
+              fontSize: 32,
+              letterSpacing: 20,
+            }}
+          >
+            ...
+          </div>
+
+          {/* Avatar */}
+          <div
+            style={{
+              marginTop: 32,
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={avatarUrl}
+              alt="Prof. NOTA"
+              width={220}
+              height={220}
+              style={{
+                borderRadius: 9999,
+                border: "4px solid #111111",
+                objectFit: "cover",
+              }}
+            />
+          </div>
         </div>
       </div>
     ),
