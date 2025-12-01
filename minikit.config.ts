@@ -31,7 +31,11 @@ export const minikitConfig = {
     description:
       "MyReceipt is an experimental Mini App by Prof. NOTA that surfaces short reflective lines and small onchain receipts inside Base App and Farcaster.",
 
-    screenshotUrls: [`${ROOT_URL}/screenshot.jpeg`],
+    screenshotUrls: [
+      `${ROOT_URL}/screenshot1.png`,
+      `${ROOT_URL}/screenshot2.png`,
+      `${ROOT_URL}/screenshot3.png`,
+    ],
     iconUrl: `${ROOT_URL}/icon.png`,
     imageUrl: `${ROOT_URL}/image.jpeg`,
     heroImageUrl: `${ROOT_URL}/hero.jpg`,
@@ -45,7 +49,7 @@ export const minikitConfig = {
     webhookUrl: `${ROOT_URL}/api/webhook`,
 
     primaryCategory: "education",
-    tags: ["myreceipt", "nota", "reflection", "education", "satusatusebelas"],
+    tags: ["receipt", "nota", "reflection", "vibes", "satusatusebelas"],
 
     tagline: "Your onchain receipt of today.",
     ogTitle: "MyReceipt",
