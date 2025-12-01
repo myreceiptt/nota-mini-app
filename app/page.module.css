@@ -53,64 +53,83 @@
 }
 
 .subtitle {
-  font-size: .9rem;
+  font-size: 0.9rem;
   line-height: 1.8;
   margin-bottom: 2.5rem;
   color: #474747;
 }
 
+/* --- Poster-style NOTA card --- */
+
 .notaCard {
-  text-align: center;
-  margin: 0 auto 2rem;
-  padding: 1.8rem 1.8rem 1.4rem;
-  max-width: 640px;
+  border: 1px solid #111111;
   border-radius: 12px;
   background: #ffffff;
-  border: 1px solid #e0e0e0;
+  padding: 2.2rem 1.6rem 2rem;
+  max-width: 340px;
+  width: 100%;
+  margin: 2rem auto 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  text-align: center;
+  gap: 0.9rem;
+  /* ratio 1074 x 1474 supaya mirip poster */
+  aspect-ratio: 1074 / 1474;
 }
 
 .notaHeader {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
 }
 
 .logoText {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.06em;
 }
 
 .incSup {
-  font-size: 0.7rem;
-  vertical-align: text-top;
+  font-size: 0.55em;
+  vertical-align: super;
   margin-left: 0.12rem;
 }
 
 .notaDots {
-  font-size: 1.1rem;
-  letter-spacing: 0.3em;
+  font-size: 0.9rem;
+  letter-spacing: 0.45em;
   color: #666666;
 }
 
 .notaText {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   line-height: 1.8;
-  max-width: 460px;
+  max-width: 80%;
   margin: 0 auto;
+  white-space: pre-line;
+}
+
+.notaTags {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  margin-top: 0.2rem;
 }
 
 .notaFooter {
-  margin-top: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
 }
 
 .notaAvatar {
   border-radius: 999px;
   border: 1px solid #111111;
   object-fit: cover;
+  width: 96px;
+  height: 96px;
 }
+
+/* --- Actions --- */
 
 .actions {
   display: flex;

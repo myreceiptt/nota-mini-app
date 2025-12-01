@@ -371,16 +371,30 @@ export default function Home() {
   const handleShare = async () => {
     try {
       setIsSharing(true);
-      const text = `MyReceipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App on Base.\n\n$OiOi $myreceipt $ENDHONESA #base #notaMiniApp`;
+
+      // Batasi panjang text utk jaga-jaga (cast + query string)
+      const notaForImage = currentNota.slice(0, 400);
+
+      const text = `MyReceipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App on Base.\n\n$MyReceipt of $ENDHONESA, $OiOi!`;
+
+      const baseUrl =
+        process.env.NEXT_PUBLIC_URL ||
+        (typeof window !== "undefined"
+          ? window.location.origin
+          : "https://mini.endhonesa.com");
+
+      const imageUrl = `${baseUrl}/api/receipt?text=${encodeURIComponent(
+        notaForImage
+      )}&name=${encodeURIComponent(displayName)}`;
 
       const result = await composeCastAsync({
         text,
-        embeds: [process.env.NEXT_PUBLIC_URL || ""],
+        embeds: [imageUrl],
       });
 
       if (result?.cast) {
         console.log("Cast created successfully:", result.cast.hash);
-        router.push("/success"); // ⬅️ pindah ke halaman success
+        router.push("/success");
       } else {
         console.log("User cancelled the cast");
       }
@@ -412,6 +426,8 @@ export default function Home() {
             <div className={styles.notaDots}>...</div>
 
             <p className={styles.notaText}>{currentNota}</p>
+
+            <p className={styles.notaTags}>$MyReceipt of $ENDHONESA, $OiOi!</p>
 
             <div className={styles.notaDots}>...</div>
 

@@ -18,7 +18,7 @@ export default function Success() {
 
   const handleShare = async () => {
     try {
-      const text = `I just pulled today’s receipt from ${minikitConfig.miniapp.name} Mini App on Base.\n\nA small onchain receipt for how I see today, OiOi.\n\n$OiOi $myreceipt $ENDHONESA #base #notaMiniApp`;
+      const text = `I just pulled today’s receipt from ${minikitConfig.miniapp.name} Mini App on Base.\n\nA small onchain receipt for how I see today, OiOi.\n\n$MyReceipt of $ENDHONESA, $OiOi!`;
 
       const result = await composeCastAsync({
         text,
