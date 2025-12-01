@@ -1,6 +1,10 @@
 "use client";
 
-import { useMiniKit, useComposeCast } from "@coinbase/onchainkit/minikit";
+import {
+  useMiniKit,
+  useComposeCast,
+  useAddFrame,
+} from "@coinbase/onchainkit/minikit";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -303,6 +307,7 @@ function generateReceipt(rawName?: string | null): string {
 export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const { composeCastAsync } = useComposeCast();
+  const addFrame = useAddFrame();
   const router = useRouter();
 
   // Helper for displayName / username
@@ -344,6 +349,23 @@ export default function Home() {
     const next = generateReceipt(displayName);
     setCurrentNota(next);
     setNameUsed(displayName);
+  };
+
+  const handleSaveMiniApp = async () => {
+    try {
+      const result = await addFrame();
+
+      // result bisa undefined/null kalau host tidak support atau user cancel
+      if (result) {
+        console.log("Mini App saved in host:", result);
+        // result.url  → URL yang disimpan
+        // result.token → token notifikasi (kalau host mengembalikan)
+      } else {
+        console.log("Save Mini App cancelled or unavailable");
+      }
+    } catch (error) {
+      console.error("Error saving Mini App:", error);
+    }
   };
 
   const handleShare = async () => {
@@ -411,6 +433,14 @@ export default function Home() {
               onClick={handleAnother}
             >
               Another Receipt
+            </button>
+
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={handleSaveMiniApp}
+            >
+              Save MyReceipt
             </button>
 
             <button
