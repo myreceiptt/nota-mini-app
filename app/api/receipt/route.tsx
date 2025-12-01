@@ -1,22 +1,14 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const size = {
-  width: 1074,
-  height: 1474,
-};
-export const contentType = "image/png";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const rawText = searchParams.get("text") ?? "Your receipt of today.";
-  // const rawName = searchParams.get("name") ?? "OiOi";
+  // Text yang akan ditampilkan di kartu
+  const text = searchParams.get("text") || "Your receipt of today.";
 
-  // Sedikit guard supaya gak kelewat panjang
-  // const name = rawName.slice(0, 64);
-  const text = rawText.slice(0, 400);
-
+  // Basis URL untuk ambil avatar
   const origin = new URL(request.url).origin;
   const avatarUrl = `${origin}/nota-pfp.png`;
 
@@ -32,13 +24,12 @@ export async function GET(request: Request) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "flex-start",
-          fontFamily:
-            "Menlo, ui-monospace, SFMono-Regular, Monaco, 'Courier New', monospace",
+          fontFamily: "Menlo, ui-monospace, SFMono-Regular, monospace",
           paddingTop: 120,
           paddingBottom: 120,
         }}
       >
-        {/* Header: Prof. NOTA Inc. */}
+        {/* Header */}
         <div
           style={{
             fontSize: 72,
@@ -58,7 +49,6 @@ export async function GET(request: Request) {
           </span>
         </div>
 
-        {/* ... di bawah logo */}
         <div
           style={{
             marginTop: 40,
@@ -69,7 +59,7 @@ export async function GET(request: Request) {
           ...
         </div>
 
-        {/* Body text / receipt */}
+        {/* Body text */}
         <div
           style={{
             marginTop: 80,
@@ -94,7 +84,6 @@ export async function GET(request: Request) {
           $MyReceipt of $ENDHONESA, $OiOi!
         </div>
 
-        {/* ... sebelum avatar */}
         <div
           style={{
             marginTop: 40,
@@ -126,7 +115,8 @@ export async function GET(request: Request) {
       </div>
     ),
     {
-      ...size,
+      width: 1074,
+      height: 1474,
     }
   );
 }
