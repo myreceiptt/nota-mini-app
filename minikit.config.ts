@@ -46,6 +46,7 @@ export const minikitConfig = {
     castShareUrl: `${ROOT_URL}/`,
 
     homeUrl: ROOT_URL,
+    canonicalDomain: "mini.endhonesa.com",
     webhookUrl: `${ROOT_URL}/api/webhook`,
 
     primaryCategory: "education",
