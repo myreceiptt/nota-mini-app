@@ -2,9 +2,6 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-// optional, tapi bagus untuk eksplisit
-export const contentType = "image/png";
-
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const searchParams = url.searchParams;
