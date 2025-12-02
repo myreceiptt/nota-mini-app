@@ -7,29 +7,6 @@
   position: relative;
 }
 
-.closeButton {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: 1px solid #666666;
-  color: #111111;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  transition: all 0.15s ease;
-}
-
-.closeButton:hover {
-  background: #f5f5f5;
-  border-color: #111111;
-}
-
 .content {
   display: flex;
   flex-direction: column;
@@ -59,123 +36,108 @@
   color: #474747;
 }
 
-/* --- Poster-style NOTA card --- */
-
 .notaCard {
-  border: 1px solid #111111;
+  text-align: center;
+  margin: 0 auto 1.75rem;
+  padding: 1.8rem 1.8rem 1.4rem;
+  max-width: 640px;
   border-radius: 12px;
   background: #ffffff;
-  padding: 2.2rem 1.6rem 2rem;
-  max-width: 340px;
-  width: 100%;
-  margin: 2rem auto 2rem;
+  border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 0.9rem;
-  /* ratio 1074 x 1474 supaya mirip poster */
-  aspect-ratio: 1074 / 1474;
+  gap: 1.25rem;
 }
 
 .notaHeader {
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.25rem;
 }
 
 .logoText {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.06em;
 }
 
 .incSup {
-  font-size: 0.55em;
-  vertical-align: super;
+  font-size: 0.7rem;
+  vertical-align: text-top;
   margin-left: 0.12rem;
 }
 
 .notaDots {
-  font-size: 0.9rem;
-  letter-spacing: 0.45em;
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
   color: #666666;
 }
 
 .notaText {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   line-height: 1.8;
-  max-width: 80%;
+  max-width: 460px;
   margin: 0 auto;
-  white-space: pre-line;
-}
-
-.notaTags {
-  font-size: 0.8rem;
-  letter-spacing: 0.18em;
-  margin-top: 0.2rem;
 }
 
 .notaFooter {
-  margin-top: auto;
-  padding-top: 0.6rem;
+  margin-top: 0.5rem;
 }
 
 .notaAvatar {
   border-radius: 999px;
   border: 1px solid #111111;
   object-fit: cover;
-  width: 96px;
-  height: 96px;
 }
 
-/* --- Actions --- */
-
+/* 4 icon buttons di bawah kartu */
 .actions {
+  margin: 0 auto;
+  margin-top: 0.5rem;
+  max-width: 640px;
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #111111;
 }
 
-.joinButton {
+/* Masing-masing ~1/4 lebar card */
+.iconButton {
+  flex: 1 1 25%;
+  min-width: 0;
+  background: #ffffff;
+  border: none;
+  border-right: 1px solid #111111;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111111;
+  transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.iconButton:last-child {
+  border-right: none;
+}
+
+.iconButton:hover:not(:disabled) {
   background: #111111;
   color: #ffffff;
-  border: 1px solid #111111;
-  padding: 0.8rem 2.2rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
 
-.joinButton:hover:not(:disabled) {
-  background: #474747;
-  border-color: #474747;
-}
-
-.joinButton:disabled {
-  opacity: 0.6;
+.iconButton:disabled {
+  opacity: 0.5;
   cursor: default;
 }
 
-.secondaryButton {
-  background: transparent;
-  border-radius: 999px;
-  border: 1px solid #666666;
-  color: #333333;
-  padding: 0.8rem 2rem;
+.iconGlyph {
   font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  line-height: 1;
 }
 
-.secondaryButton:hover {
-  border-color: #111111;
+/* (Opsional) kalau mau subtitle text bold di nama tetap enak dibaca */
+.subtitle strong {
+  font-weight: 600;
   color: #111111;
-  background: #f7f7f7;
 }

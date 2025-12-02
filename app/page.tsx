@@ -167,7 +167,7 @@ const RECEIPT_TEMPLATES: TemplateFn[] = [
   (name) => `${name}, don't confuse their comfort with your calling.`,
   // 55
   (name) =>
-    `You are allowed to log off mid-crisis, ${name}, and return with a clearer head.`,
+    `${name}, you are allowed to log off mid-crisis and return with a clearer head.`,
   // 56
   (name) => `${name}, the person you are becoming is worth the discomfort.`,
   // 57
@@ -204,7 +204,7 @@ const RECEIPT_TEMPLATES: TemplateFn[] = [
     `${name}, saying 'no' can be the most honest love letter to yourself.`,
   // 71
   (name) =>
-    `You are not your last failure, ${name}. That was just one experiment.`,
+    `${name}, you are not your last failure. That was just one experiment.`,
   // 72
   (name) => `${name}, sometimes the bravest thing you do is stay.`,
   // 73
@@ -233,7 +233,7 @@ const RECEIPT_TEMPLATES: TemplateFn[] = [
   (name) => `${name}, you owe your younger self a gentler voice.`,
   // 85
   (name) =>
-    `You can change your mind without apologizing for the old one, ${name}.`,
+    `${name}, you can change your mind without apologizing for the old one.`,
   // 86
   (name) => `${name}, some seasons are for planting, not posting.`,
   // 87
@@ -310,7 +310,7 @@ export default function Home() {
   const addFrame = useAddFrame();
   const router = useRouter();
 
-  // Helper for displayName / username
+  // Helper for username
   let username: string | undefined;
 
   if (context && typeof context === "object" && "user" in context) {
@@ -336,7 +336,7 @@ export default function Home() {
     }
   }, [isFrameReady, setFrameReady]);
 
-  // Generate first receipt when username changes
+  // Generate first receipt when name changes
   useEffect(() => {
     if (!currentNota || nameUsed !== displayName) {
       const next = generateReceipt(displayName);
@@ -351,15 +351,29 @@ export default function Home() {
     setNameUsed(displayName);
   };
 
+  const handleDownload = () => {
+    if (typeof window === "undefined") return;
+
+    const baseUrl = process.env.NEXT_PUBLIC_URL || window.location.origin;
+
+    const url = `${baseUrl}/api/receipt?text=${encodeURIComponent(
+      currentNota
+    )}&name=${encodeURIComponent(displayName)}`;
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "myreceipt.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleSaveMiniApp = async () => {
     try {
       const result = await addFrame();
 
-      // result bisa undefined/null kalau host tidak support atau user cancel
       if (result) {
         console.log("Mini App saved in host:", result);
-        // result.url  → URL yang disimpan
-        // result.token → token notifikasi (kalau host mengembalikan)
       } else {
         console.log("Save Mini App cancelled or unavailable");
       }
@@ -371,25 +385,14 @@ export default function Home() {
   const handleShare = async () => {
     try {
       setIsSharing(true);
-
-      // Batasi panjang text utk jaga-jaga (cast + query string)
-      const notaForImage = currentNota.slice(0, 400);
-
       const text = `MyReceipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App on Base.\n\n$MyReceipt of $ENDHONESA, $OiOi!`;
 
       const baseUrl =
-        process.env.NEXT_PUBLIC_URL ||
-        (typeof window !== "undefined"
-          ? window.location.origin
-          : "https://mini.endhonesa.com");
-
-      const imageUrl = `${baseUrl}/api/receipt?text=${encodeURIComponent(
-        notaForImage
-      )}&name=${encodeURIComponent(displayName)}`;
+        process.env.NEXT_PUBLIC_URL || "https://mini.endhonesa.com";
 
       const result = await composeCastAsync({
         text,
-        embeds: [imageUrl],
+        embeds: [baseUrl], // ⬅️ embed mini app URL, bukan API/PNG
       });
 
       if (result?.cast) {
@@ -427,8 +430,6 @@ export default function Home() {
 
             <p className={styles.notaText}>{currentNota}</p>
 
-            <p className={styles.notaTags}>$MyReceipt of $ENDHONESA, $OiOi!</p>
-
             <div className={styles.notaDots}>...</div>
 
             <div className={styles.notaFooter}>
@@ -442,30 +443,43 @@ export default function Home() {
             </div>
           </div>
 
+          {/* 4 icon buttons di bawah kartu */}
           <div className={styles.actions}>
             <button
               type="button"
-              className={styles.secondaryButton}
+              className={styles.iconButton}
               onClick={handleAnother}
+              aria-label="Another Receipt"
             >
-              Another Receipt
+              <span className={styles.iconGlyph}>⟳</span>
             </button>
 
             <button
               type="button"
-              className={styles.secondaryButton}
-              onClick={handleSaveMiniApp}
+              className={styles.iconButton}
+              onClick={handleDownload}
+              aria-label="Download Receipt"
             >
-              Save MyReceipt
+              <span className={styles.iconGlyph}>⬇</span>
             </button>
 
             <button
               type="button"
-              className={styles.joinButton}
+              className={styles.iconButton}
               onClick={handleShare}
               disabled={isSharing}
+              aria-label="Share MyReceipt"
             >
-              {isSharing ? "Sharing..." : "Share MyReceipt"}
+              <span className={styles.iconGlyph}>{isSharing ? "…" : "✶"}</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.iconButton}
+              onClick={handleSaveMiniApp}
+              aria-label="Save Mini App"
+            >
+              <span className={styles.iconGlyph}>✚</span>
             </button>
           </div>
         </div>
