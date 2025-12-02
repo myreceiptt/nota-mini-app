@@ -146,7 +146,7 @@ async function renderReceiptImage(
   // ============================
   y += blankGap;
 
-  const tagline = "— $MyReceipt for $ENDHONESA, $OiOi! —";
+  const tagline = "— $MyReceipt for $ENDHONESA, $OiOi. —";
   ctx.font = "32px Menlo, ui-monospace, SFMono-Regular, monospace";
   const taglineLineHeight = 32 * 1.6;
 
@@ -281,7 +281,7 @@ export default function Home() {
   const handleShare = async () => {
     try {
       setIsSharing(true);
-      const text = `MyReceipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App on Base.\n\n$MyReceipt $ENDHONESA $OiOi`;
+      const text = `MyReceipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App on Base as $MyReceipt for $ENDHONESA, $OiOi`;
 
       const baseUrl =
         process.env.NEXT_PUBLIC_URL || "https://mini.endhonesa.com";

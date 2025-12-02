@@ -27,7 +27,7 @@ export default function Success() {
 
   const handleTips = async () => {
     try {
-      const text = `If today's receipt landed for you, consider tipping or collecting around $MyReceipt / $ENDHONESA to support Prof. NOTA.\n\n$MyReceipt for $ENDHONESA, $OiOi!`;
+      const text = `If today's receipt landed for you, consider tipping or collecting around $MyReceipt / $ENDHONESA / $OiOi to support Prof. NOTA.\n\n— $MyReceipt for $ENDHONESA, $OiOi.`;
 
       const result = await composeCastAsync({
         text,
@@ -59,7 +59,7 @@ export default function Success() {
 
   const handleShare = async () => {
     try {
-      const text = `I just pulled today's receipt from ${minikitConfig.miniapp.name} Mini App on Base.\n\nA small onchain receipt for how I see today, OiOi.\n\n$MyReceipt $ENDHONESA $OiOi`;
+      const text = `I just pulled today's receipt from ${minikitConfig.miniapp.name} Mini App on Base.\n\nA small onchain receipt for how I see today, OiOi.\n\n— $MyReceipt for $ENDHONESA $OiOi.`;
 
       const result = await composeCastAsync({
         text,
