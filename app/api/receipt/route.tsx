@@ -2,13 +2,25 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
+// optional, tapi bagus untuk eksplisit
+export const contentType = "image/png";
+
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
 
-  const textParam = searchParams.get("text") || "Your receipt of today.";
-  const name = searchParams.get("name") || "OiOi";
+  const rawText = searchParams.get("text") || "Your receipt of today.";
+  const rawName = searchParams.get("name") || "OiOi";
 
-  const origin = new URL(request.url).origin;
+  // jaga nama tetap singkat
+  const safeName =
+    rawName && rawName.trim().length > 0 ? rawName.trim() : "OiOi";
+
+  // batasi panjang text biar tetap rapi di kartu
+  const text =
+    rawText.length > 260 ? `${rawText.slice(0, 257).trimEnd()}…` : rawText;
+
+  const origin = url.origin;
   const avatarUrl = `${origin}/nota-pfp.png`;
 
   return new ImageResponse(
@@ -17,42 +29,40 @@ export async function GET(request: Request) {
         style={{
           width: "100%",
           height: "100%",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#f3f3f3", // ⬅️ bukan full putih lagi
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           fontFamily: "Menlo, ui-monospace, SFMono-Regular, monospace",
         }}
       >
-        {/* Kartu di tengah, dengan border jelas */}
+        {/* Kartu di tengah */}
         <div
           style={{
             width: 900,
             height: 1250,
-            border: "2px solid #111111",
-            borderRadius: 24,
             backgroundColor: "#ffffff",
-            color: "#111111",
-            padding: 64,
+            borderRadius: 32,
+            border: "2px solid #111111",
+            boxShadow: "0 18px 60px rgba(0,0,0,0.08)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "space-between",
+            padding: 80,
           }}
         >
           {/* Header */}
           <div
             style={{
-              fontSize: 48,
+              fontSize: 56,
               fontWeight: 700,
-              letterSpacing: 8,
-              textAlign: "center",
+              letterSpacing: 6,
             }}
           >
             Prof. NOTA
             <span
               style={{
-                fontSize: 24,
+                fontSize: 26,
                 verticalAlign: "super",
                 marginLeft: 4,
               }}
@@ -61,52 +71,54 @@ export async function GET(request: Request) {
             </span>
           </div>
 
-          {/* Dots atas */}
           <div
             style={{
-              marginTop: 24,
+              marginTop: 36,
               fontSize: 32,
-              letterSpacing: 20,
+              letterSpacing: 18,
+              color: "#666666",
             }}
           >
             ...
           </div>
 
-          {/* Body text / receipt */}
+          {/* Body text */}
           <div
             style={{
+              marginTop: 72,
               flex: 1,
+              width: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
-              fontSize: 40,
-              lineHeight: 1.5,
-              padding: "0 16px",
+              fontSize: 36,
+              lineHeight: 1.7,
+              color: "#111111",
               whiteSpace: "pre-wrap",
             }}
           >
-            {textParam}
+            {text}
           </div>
 
-          {/* Hashtags + nama */}
+          {/* Hashtag + nama user */}
           <div
             style={{
               marginTop: 24,
-              fontSize: 28,
+              fontSize: 24,
               letterSpacing: 6,
-              textAlign: "center",
+              color: "#666666",
             }}
           >
-            #{name} • #OiOi • #endhonesa
+            {`#MyReceipt #OiOi #endhonesa • for ${safeName}`}
           </div>
 
-          {/* Dots bawah */}
           <div
             style={{
               marginTop: 24,
               fontSize: 32,
-              letterSpacing: 20,
+              letterSpacing: 18,
+              color: "#666666",
             }}
           >
             ...
@@ -115,18 +127,18 @@ export async function GET(request: Request) {
           {/* Avatar */}
           <div
             style={{
-              marginTop: 32,
+              marginTop: 36,
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={avatarUrl}
               alt="Prof. NOTA"
-              width={220}
-              height={220}
+              width={200}
+              height={200}
               style={{
                 borderRadius: 9999,
-                border: "4px solid #111111",
+                border: "3px solid #111111",
                 objectFit: "cover",
               }}
             />
