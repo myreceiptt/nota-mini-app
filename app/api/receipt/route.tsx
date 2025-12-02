@@ -1,151 +1,142 @@
 import { ImageResponse } from "next/og";
 
+// Wajib untuk ImageResponse di route handler
 export const runtime = "edge";
 
 export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
+  try {
+    const { searchParams } = new URL(request.url);
 
-  const rawText = searchParams.get("text") || "Your receipt of today.";
-  const rawName = searchParams.get("name") || "OiOi";
+    const rawText = searchParams.get("text") ?? "Your receipt of today.";
+    const nameParam = searchParams.get("name") ?? "OiOi";
 
-  // jaga nama tetap singkat
-  const safeName =
-    rawName && rawName.trim().length > 0 ? rawName.trim() : "OiOi";
+    // Batasin panjang teks biar nggak bikin masalah di renderer
+    const safeText = rawText.slice(0, 280);
+    const safeName = nameParam.trim().length > 0 ? nameParam.trim() : "OiOi";
 
-  // batasi panjang text biar tetap rapi di kartu
-  const text =
-    rawText.length > 260 ? `${rawText.slice(0, 257).trimEnd()}…` : rawText;
-
-  const origin = url.origin;
-  const avatarUrl = `${origin}/nota-pfp.png`;
-
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#f3f3f3", // ⬅️ bukan full putih lagi
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontFamily: "Menlo, ui-monospace, SFMono-Regular, monospace",
-        }}
-      >
-        {/* Kartu di tengah */}
+    return new ImageResponse(
+      (
         <div
           style={{
-            width: 900,
-            height: 1250,
+            width: "100%",
+            height: "100%",
             backgroundColor: "#ffffff",
-            borderRadius: 32,
-            border: "2px solid #111111",
-            boxShadow: "0 18px 60px rgba(0,0,0,0.08)",
+            color: "#111111",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
-            padding: 80,
+            justifyContent: "center",
+            fontFamily:
+              "ui-monospace, Menlo, Monaco, SFMono-Regular, 'SF Mono', 'Roboto Mono', monospace",
           }}
         >
-          {/* Header */}
           <div
             style={{
-              fontSize: 56,
-              fontWeight: 700,
-              letterSpacing: 6,
+              width: "85%",
+              height: "85%",
+              border: "2px solid #111111",
+              borderRadius: 16,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: 64,
+              boxSizing: "border-box",
             }}
           >
-            Prof. NOTA
-            <span
+            {/* Header */}
+            <div
               style={{
-                fontSize: 26,
-                verticalAlign: "super",
-                marginLeft: 4,
+                fontSize: 56,
+                fontWeight: 700,
+                letterSpacing: 8,
+                textAlign: "center",
               }}
             >
-              Inc.
-            </span>
-          </div>
+              Prof. NOTA
+              <span
+                style={{
+                  fontSize: 28,
+                  verticalAlign: "super",
+                  marginLeft: 4,
+                }}
+              >
+                Inc.
+              </span>
+            </div>
 
-          <div
-            style={{
-              marginTop: 36,
-              fontSize: 32,
-              letterSpacing: 18,
-              color: "#666666",
-            }}
-          >
-            ...
-          </div>
-
-          {/* Body text */}
-          <div
-            style={{
-              marginTop: 72,
-              flex: 1,
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              fontSize: 36,
-              lineHeight: 1.7,
-              color: "#111111",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {text}
-          </div>
-
-          {/* Hashtag + nama user */}
-          <div
-            style={{
-              marginTop: 24,
-              fontSize: 24,
-              letterSpacing: 6,
-              color: "#666666",
-            }}
-          >
-            {`#MyReceipt #OiOi #endhonesa • for ${safeName}`}
-          </div>
-
-          <div
-            style={{
-              marginTop: 24,
-              fontSize: 32,
-              letterSpacing: 18,
-              color: "#666666",
-            }}
-          >
-            ...
-          </div>
-
-          {/* Avatar */}
-          <div
-            style={{
-              marginTop: 36,
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={avatarUrl}
-              alt="Prof. NOTA"
-              width={200}
-              height={200}
+            <div
               style={{
-                borderRadius: 9999,
-                border: "3px solid #111111",
-                objectFit: "cover",
+                marginTop: 24,
+                fontSize: 32,
+                letterSpacing: 18,
               }}
-            />
+            >
+              ...
+            </div>
+
+            {/* Body */}
+            <div
+              style={{
+                marginTop: 32,
+                marginBottom: 32,
+                fontSize: 40,
+                lineHeight: 1.6,
+                textAlign: "center",
+                whiteSpace: "pre-wrap",
+                maxWidth: 820,
+              }}
+            >
+              {safeText}
+            </div>
+
+            <div
+              style={{
+                fontSize: 28,
+                marginTop: 24,
+                color: "#474747",
+                textAlign: "center",
+              }}
+            >
+              — MyReceipt of Today for {safeName}
+            </div>
+
+            <div
+              style={{
+                marginTop: 24,
+                fontSize: 28,
+                letterSpacing: 12,
+              }}
+            >
+              #oioi · #endhonesa
+            </div>
+
+            {/* “Avatar” dummy circle (tanpa load file dulu, supaya aman) */}
+            <div
+              style={{
+                marginTop: 32,
+                width: 220,
+                height: 220,
+                borderRadius: 9999,
+                border: "4px solid #111111",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 72,
+                fontWeight: 700,
+              }}
+            >
+              PN
+            </div>
           </div>
         </div>
-      </div>
-    ),
-    {
-      width: 1074,
-      height: 1474,
-    }
-  );
+      ),
+      {
+        width: 1074,
+        height: 1474,
+      }
+    );
+  } catch (error) {
+    console.error("Error generating receipt image", error);
+    return new Response("Failed to generate image", { status: 500 });
+  }
 }
