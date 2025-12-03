@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { NavBar } from "./components/NavBar";
 import styles from "./page.module.css";
 
 type MiniKitUser = {
@@ -49,27 +50,7 @@ export function AppShell({ header, footer, children }: AppShellProps) {
   return (
     <div className={styles.appRoot}>
       {/* NavBar */}
-      <header className={styles.navbar}>
-        <div className={styles.navTitle}>$MyReceipt</div>
-        <div className={styles.navRight}>
-          {avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={avatarUrl}
-              alt={displayName}
-              className={styles.navAvatar}
-            />
-          ) : (
-            // Fallback: icon.png
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src="/icon.png"
-              alt="MyReceipt icon"
-              className={styles.navAvatar}
-            />
-          )}
-        </div>
-      </header>
+      <NavBar title="$MyReceipt" avatarUrl={avatarUrl} displayName={displayName} />
 
       {/* Main content */}
       <main className={styles.main}>

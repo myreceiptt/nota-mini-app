@@ -2,6 +2,7 @@
 
 import { RotateCcw, Coins, Pin, Share2 } from "lucide-react";
 
+import { IconButton } from "../../components/IconButton";
 import styles from "../page.module.css";
 
 type SuccessActionsProps = {
@@ -20,45 +21,37 @@ export function SuccessActions({
   return (
     <div className={styles.actions}>
       <div className={styles.actionRow}>
-        <button
-          type="button"
-          className={styles.iconButton}
+        <IconButton
           onClick={onGet}
-          aria-label="Get another receipt"
-        >
-          <RotateCcw className={styles.iconGlyph} />
-          <span className={styles.iconLabel}>Get</span>
-        </button>
-
-        <button
-          type="button"
+          ariaLabel="Get another receipt"
           className={styles.iconButton}
+          icon={<RotateCcw className={styles.iconGlyph} />}
+          label={<span className={styles.iconLabel}>Get</span>}
+        />
+
+        <IconButton
           onClick={onTips}
-          aria-label="Send tips cast"
-        >
-          <Coins className={styles.iconGlyph} />
-          <span className={styles.iconLabel}>Tips</span>
-        </button>
-
-        <button
-          type="button"
+          ariaLabel="Send tips cast"
           className={styles.iconButton}
-          onClick={onPin}
-          aria-label="Pin Mini App"
-        >
-          <Pin className={styles.iconGlyph} />
-          <span className={styles.iconLabel}>Pin</span>
-        </button>
+          icon={<Coins className={styles.iconGlyph} />}
+          label={<span className={styles.iconLabel}>Tips</span>}
+        />
 
-        <button
-          type="button"
-          className={`${styles.iconButton} ${styles.primaryAction}`}
+        <IconButton
+          onClick={onPin}
+          ariaLabel="Pin Mini App"
+          className={styles.iconButton}
+          icon={<Pin className={styles.iconGlyph} />}
+          label={<span className={styles.iconLabel}>Pin</span>}
+        />
+
+        <IconButton
           onClick={onShare}
-          aria-label="Share MyReceipt"
-        >
-          <Share2 className={styles.iconGlyph} />
-          <span className={styles.iconLabel}>Share</span>
-        </button>
+          ariaLabel="Share MyReceipt"
+          className={`${styles.iconButton} ${styles.primaryAction}`}
+          icon={<Share2 className={styles.iconGlyph} />}
+          label={<span className={styles.iconLabel}>Share</span>}
+        />
       </div>
     </div>
   );
