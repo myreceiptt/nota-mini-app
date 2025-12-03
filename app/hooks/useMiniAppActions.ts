@@ -8,6 +8,9 @@ import {
   useOpenUrl,
 } from "@coinbase/onchainkit/minikit";
 
+import { getBaseUrl, getTipUrl } from "../lib/env";
+import { buildShareText } from "../lib/shareText";
+
 type UseMiniAppActionsParams = {
   renderText: string;
   currentNota: string;
@@ -21,9 +24,6 @@ type UseMiniAppActionsResult = {
   handleOpenStandalone: () => void;
   handleTips: () => void;
 };
-
-const TIP_URL =
-  process.env.NEXT_PUBLIC_TIP_URL || "https://warpcast.com/myreceipt";
 
 export function useMiniAppActions({
   renderText,
@@ -54,10 +54,8 @@ export function useMiniAppActions({
     try {
       setIsSharing(true);
       const textBody = renderText || currentNota;
-      const text = `MyReceipt of Today:\n\n“${textBody}”\n\n— pulled from MyReceipt Mini App on Base as $MyReceipt for $ENDHONESA, $OiOi.`;
-
-      const baseUrl =
-        process.env.NEXT_PUBLIC_URL || "https://mini.endhonesa.com";
+      const text = buildShareText(textBody);
+      const baseUrl = getBaseUrl();
 
       const result = await composeCastAsync({
         text,
@@ -92,7 +90,7 @@ export function useMiniAppActions({
 
   const handleTips = () => {
     try {
-      openUrl(TIP_URL);
+      openUrl(getTipUrl());
     } catch (error) {
       console.error("Error opening tips URL:", error);
     }

@@ -3,7 +3,7 @@
 import styles from "./page.module.css";
 import { SuccessActions } from "./components/SuccessActions";
 import { SuccessHero } from "./components/SuccessHero";
-import { useSuccessActions } from "./useSuccessActions";
+import { useSuccessActions } from "../hooks/useSuccessActions";
 
 export default function Success() {
   const { handleClose, handleGet, handleTips, handlePin, handleShare } =

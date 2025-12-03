@@ -3,6 +3,10 @@
 import { useAddFrame, useComposeCast } from "@coinbase/onchainkit/minikit";
 import { useRouter } from "next/navigation";
 
+import { minikitConfig } from "../../minikit.config";
+import { getBaseUrl } from "../lib/env";
+import { buildSuccessShareText, buildTipCastText } from "../lib/shareText";
+
 type UseSuccessActionsResult = {
   handleClose: () => void;
   handleGet: () => void;
@@ -16,7 +20,7 @@ export function useSuccessActions(): UseSuccessActionsResult {
   const addFrame = useAddFrame();
   const router = useRouter();
 
-  const baseUrl = process.env.NEXT_PUBLIC_URL || "https://mini.endhonesa.com";
+  const baseUrl = getBaseUrl();
 
   const handleClose = () => {
     router.push("/");
@@ -28,7 +32,7 @@ export function useSuccessActions(): UseSuccessActionsResult {
 
   const handleTips = async () => {
     try {
-      const text = `If today's receipt landed for you, consider tipping or collecting around $MyReceipt / $ENDHONESA / $OiOi to support Prof. NOTA.\n\n— $MyReceipt for $ENDHONESA, $OiOi.`;
+      const text = buildTipCastText();
 
       const result = await composeCastAsync({
         text,
@@ -60,7 +64,7 @@ export function useSuccessActions(): UseSuccessActionsResult {
 
   const handleShare = async () => {
     try {
-      const text = `I just pulled today's receipt from MyReceipt Mini App on Base.\n\nA small onchain receipt for how I see today, OiOi.\n\n— $MyReceipt for $ENDHONESA $OiOi.`;
+      const text = buildSuccessShareText(minikitConfig.miniapp.name);
 
       const result = await composeCastAsync({
         text,
