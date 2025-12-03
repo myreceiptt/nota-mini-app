@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { useOpenReceipt } from "../hooks/useOpenReceipt";
 import styles from "../page.module.css";
 
-export default function OpenReceiptPage() {
+function OpenReceiptContent() {
   const searchParams = useSearchParams();
   const text = searchParams.get("text") ?? "";
   const name = searchParams.get("name") ?? "OiOi";
@@ -88,5 +89,13 @@ export default function OpenReceiptPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OpenReceiptPage() {
+  return (
+    <Suspense fallback={null}>
+      <OpenReceiptContent />
+    </Suspense>
   );
 }
