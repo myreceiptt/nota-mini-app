@@ -4,17 +4,22 @@ import {
   useMiniKit,
   useComposeCast,
   useAddFrame,
+  useOpenUrl,
 } from "@coinbase/onchainkit/minikit";
 import { RotateCcw, Download, Pin, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { minikitConfig } from "../minikit.config";
-import { generateReceipt } from "./receiptTemplates";
+import { generateReceipt, getMaxReceiptLength } from "./receiptTemplates";
+import { AppShell } from "./AppShell";
 import styles from "./page.module.css";
 
 const CARD_WIDTH = 1074;
 const CARD_HEIGHT = 1474;
+
+const TIP_URL =
+  process.env.NEXT_PUBLIC_TIP_URL || "https://warpcast.com/myreceipt";
 
 function wrapText(
   ctx: CanvasRenderingContext2D,
@@ -185,23 +190,11 @@ async function renderReceiptImage(
   return canvas.toDataURL("image/png");
 }
 
-// MyReceipt Mini App homepage
-// --------------------------------
-// Main flow:
-// 1. Read MiniKit context (user displayName, etc.).
-// 2. Generate a one-small receipt from receiptTemplates (generateReceipt).
-// 3. Render the result to a 1074x1474 canvas as a "live receipt".
-// 4. Save the canvas result to the URL data for the Download button.
-// 5. Provide the actions:
-//    - "Get another": generate a new receipt.
-//    - "Download": download the receipt image.
-//    - "Pin Mini App": call useAddFrame to save the Mini App.
-//    - "Share": call useComposeCast to create a cast.
-
 export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const { composeCastAsync } = useComposeCast();
   const addFrame = useAddFrame();
+  const openUrl = useOpenUrl();
   const router = useRouter();
 
   // Ambil username kalau ada
@@ -223,6 +216,23 @@ export default function Home() {
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
 
+  // editorText: isi textarea yang bisa di-edit
+  // renderText: isi yang sudah di-apply ke kartu & image
+  const [editorText, setEditorText] = useState<string>("");
+  const [renderText, setRenderText] = useState<string>("");
+  const [isRendering, setIsRendering] = useState<boolean>(true);
+
+  // Batas karakter textarea: pakai max length (nama 32 char)
+  const textLimit = useMemo(
+    () => getMaxReceiptLength(displayName),
+    [displayName]
+  );
+
+  const hasChanges = useMemo(
+    () => editorText.trim() !== renderText.trim(),
+    [editorText, renderText]
+  );
+
   // Mark Mini App ready
   useEffect(() => {
     if (!isFrameReady) {
@@ -236,19 +246,30 @@ export default function Home() {
       const next = generateReceipt(displayName);
       setCurrentNota(next);
       setNameUsed(displayName);
+
+      // default textarea = template yang sedang dipakai
+      setEditorText(next);
+      // isi kartu & image = template ini juga
+      setRenderText(next);
+
       setImageDataUrl(null);
+      setIsRendering(true);
     }
   }, [displayName, currentNota, nameUsed]);
 
-  // Render PNG berbasis currentNota + displayName
+  // Render PNG berbasis renderText + displayName
   useEffect(() => {
     let cancelled = false;
 
     const makeImage = async () => {
-      if (!currentNota) return;
-      const url = await renderReceiptImage(currentNota, displayName);
+      if (!renderText) return;
+      setIsRendering(true);
+
+      const url = await renderReceiptImage(renderText, displayName);
+
       if (!cancelled) {
         setImageDataUrl(url || "");
+        setIsRendering(false);
       }
     };
 
@@ -257,13 +278,25 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-  }, [currentNota, displayName]);
+  }, [renderText, displayName]);
 
   const handleAnother = () => {
     const next = generateReceipt(displayName);
     setCurrentNota(next);
-    setNameUsed(displayName);
+    setEditorText(next);
+    setRenderText(next);
     setImageDataUrl(null);
+    // isRendering akan di-set di effect renderText
+  };
+
+  const handleApplyEdits = () => {
+    const trimmed = editorText.trim();
+    // kalau kosong atau tidak ada perubahan → NO-OP
+    if (!trimmed || !hasChanges) return;
+
+    setRenderText(trimmed);
+    setImageDataUrl(null);
+    // isRendering akan di-set di effect renderText
   };
 
   const handleDownloadCard = () => {
@@ -294,7 +327,8 @@ export default function Home() {
   const handleShare = async () => {
     try {
       setIsSharing(true);
-      const text = `MyReceipt of Today:\n\n“${currentNota}”\n\n— pulled from MyReceipt Mini App on Base as $MyReceipt for $ENDHONESA, $OiOi`;
+      const textBody = renderText || currentNota;
+      const text = `MyReceipt of Today:\n\n“${textBody}”\n\n— pulled from MyReceipt Mini App on Base as $MyReceipt for $ENDHONESA, $OiOi.`;
 
       const baseUrl =
         process.env.NEXT_PUBLIC_URL || "https://mini.endhonesa.com";
@@ -317,79 +351,168 @@ export default function Home() {
     }
   };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.shell}>
-          <h1 className={styles.title}>{minikitConfig.miniapp.name}</h1>
+  const handleOpenStandalone = () => {
+    if (!renderText && !currentNota) return;
 
+    const displayText = renderText || currentNota;
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
+
+    const url = `${origin}/open?text=${encodeURIComponent(
+      displayText
+    )}&name=${encodeURIComponent(displayName || "OiOi")}`;
+
+    openUrl(url);
+  };
+
+  const handleTips = () => {
+    try {
+      openUrl(TIP_URL);
+    } catch (error) {
+      console.error("Error opening tips URL:", error);
+    }
+  };
+
+  const displayText = renderText || currentNota;
+
+  return (
+    <AppShell
+      header={
+        <>
+          <h1 className={styles.title}>{minikitConfig.miniapp.name}</h1>
           <p className={styles.subtitle}>
             Hi, <strong>{displayName}</strong>. Here&apos;s a small receipt for
             today — a short line to nudge how you see your day onchain and off.
           </p>
+        </>
+      }
+      footer={
+        <div className={styles.actions}>
+          <div className={styles.actionRow}>
+            <button
+              type="button"
+              className={styles.iconButton}
+              onClick={handleAnother}
+              aria-label="Get another receipt."
+            >
+              <RotateCcw className={styles.iconGlyph} />
+              <span className={styles.iconLabel}>Get</span>
+            </button>
 
-          <div className={styles.notaCard}>
-            {imageDataUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={imageDataUrl}
-                alt={`MyReceipt for ${displayName}`}
-                className={styles.notaImage}
-              />
-            ) : (
-              <p className={styles.notaText}>{currentNota}</p>
-            )}
-          </div>
+            <button
+              type="button"
+              className={styles.iconButton}
+              onClick={handleTips}
+              aria-label="Send tips to Prof. NOTA."
+            >
+              <Download className={styles.iconGlyph} />
+              <span className={styles.iconLabel}>Tips</span>
+            </button>
 
-          <div className={styles.actions}>
-            <div className={styles.actionRow}>
-              <button
-                type="button"
-                className={styles.iconButton}
-                onClick={handleAnother}
-                aria-label="Get another receipt."
-              >
-                <RotateCcw className={styles.iconGlyph} />
-                <span className={styles.iconLabel}>Get</span>
-              </button>
+            <button
+              type="button"
+              className={styles.iconButton}
+              onClick={handleSaveMiniApp}
+              aria-label="Pin MyReceipt mini app."
+            >
+              <Pin className={styles.iconGlyph} />
+              <span className={styles.iconLabel}>Pin</span>
+            </button>
 
-              <button
-                type="button"
-                className={styles.iconButton}
-                onClick={handleDownloadCard}
-                disabled={!imageDataUrl}
-                aria-label="Download receipt as image."
-              >
-                <Download className={styles.iconGlyph} />
-                <span className={styles.iconLabel}>Save</span>
-              </button>
-
-              <button
-                type="button"
-                className={styles.iconButton}
-                onClick={handleSaveMiniApp}
-                aria-label="Pin MyReceipt mini app."
-              >
-                <Pin className={styles.iconGlyph} />
-                <span className={styles.iconLabel}>Pin</span>
-              </button>
-
-              <button
-                type="button"
-                className={`${styles.iconButton} ${styles.primaryAction}`}
-                onClick={handleShare}
-                disabled={isSharing}
-                aria-label="Share receipt of today."
-              >
-                <Share2 className={styles.iconGlyph} />
-                <span className={styles.iconLabel}>
-                  {isSharing ? "Sharing…" : "Share"}
-                </span>
-              </button>
-            </div>
+            <button
+              type="button"
+              className={`${styles.iconButton} ${styles.primaryAction}`}
+              onClick={handleShare}
+              disabled={isSharing}
+              aria-label="Share receipt of today."
+            >
+              <Share2 className={styles.iconGlyph} />
+              <span className={styles.iconLabel}>
+                {isSharing ? "Sharing…" : "Share"}
+              </span>
+            </button>
           </div>
         </div>
-      </div>
-    </div>
+      }
+    >
+      <>
+        {/* Receipt card */}
+        <div className={styles.notaCard}>
+          {imageDataUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={imageDataUrl}
+              alt={`MyReceipt for ${displayName}`}
+              className={styles.notaImage}
+            />
+          ) : isRendering ? (
+            <div className={styles.notaLoader}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/sphere.svg"
+                alt="Loading receipt…"
+                className={styles.notaLoaderImage}
+              />
+            </div>
+          ) : (
+            <p className={styles.notaText}>{displayText}</p>
+          )}
+        </div>
+
+        {/* Editor + CTA atas (Update / Mint / Open image) */}
+        <section className={styles.appendSection}>
+          <label className={styles.appendLabel} htmlFor="user-append">
+            Add your own line to this receipt
+          </label>
+
+          <textarea
+            id="user-append"
+            className={styles.appendTextarea}
+            placeholder="Type 1–2 lines that feel true for you today…"
+            maxLength={textLimit}
+            value={editorText}
+            onChange={(e) => setEditorText(e.target.value)}
+          />
+
+          <p className={styles.appendHint}>
+            Start from this version, edit it, or add 1–2 more lines — then apply
+            it to the card.
+          </p>
+
+          <div className={styles.appendActions}>
+            {/* Update receipt */}
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={handleApplyEdits}
+              disabled={!editorText.trim() || !hasChanges}
+              aria-label="Apply your edits to the receipt card."
+            >
+              Update receipt
+            </button>
+
+            {/* Mint receipt (soon) — dummy & disabled */}
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              disabled
+              aria-label="Mint receipt (coming soon)."
+            >
+              Mint receipt (soon)
+            </button>
+
+            {/* Open as image */}
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={handleOpenStandalone}
+              disabled={!displayText}
+              aria-label="Open this receipt as a standalone image."
+            >
+              Open as image
+            </button>
+          </div>
+        </section>
+      </>
+    </AppShell>
   );
 }

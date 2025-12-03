@@ -343,3 +343,17 @@ export function generateReceipt(rawName?: string | null): string {
   const idx = Math.floor(Math.random() * RECEIPT_TEMPLATES.length);
   return RECEIPT_TEMPLATES[idx](safeName);
 }
+
+export function getMaxReceiptLength(_rawName?: string | null): number {
+  // Maksimal displayName yang kita asumsikan
+  const MAX_DISPLAY_NAME_LENGTH = 32;
+  const dummyName = "12345678901234567890123456789012"; // 32 karakter
+
+  const max = RECEIPT_TEMPLATES.reduce((currentMax, template) => {
+    // Hitung panjang receipt dengan nama sepanjang 32 karakter
+    const len = template(dummyName).length;
+    return len > currentMax ? len : currentMax;
+  }, 0);
+
+  return max;
+}
