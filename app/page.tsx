@@ -185,6 +185,19 @@ async function renderReceiptImage(
   return canvas.toDataURL("image/png");
 }
 
+// MyReceipt Mini App homepage
+// --------------------------------
+// Main flow:
+// 1. Read MiniKit context (user displayName, etc.).
+// 2. Generate a one-small receipt from receiptTemplates (generateReceipt).
+// 3. Render the result to a 1074x1474 canvas as a "live receipt".
+// 4. Save the canvas result to the URL data for the Download button.
+// 5. Provide the actions:
+//    - "Get another": generate a new receipt.
+//    - "Download": download the receipt image.
+//    - "Pin Mini App": call useAddFrame to save the Mini App.
+//    - "Share": call useComposeCast to create a cast.
+
 export default function Home() {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const { composeCastAsync } = useComposeCast();

@@ -1,3 +1,14 @@
+// app/api/receipt/route.tsx
+
+// -------------
+// This route generates a receipt image using next/og.
+// Query parameters:
+// - text: The text of the receipt (limited to ±280 characters).
+// - name: The name of the user/receipt owner (default "OiOi").
+// -------------
+// Used as an alternative card renderer if you ever want to
+// create an OG image or a link that displays the image directly.
+
 import { ImageResponse } from "next/og";
 
 // Wajib untuk ImageResponse di route handler

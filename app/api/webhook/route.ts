@@ -1,4 +1,19 @@
 // app/api/webhook/route.ts
+
+// Base Mini App Webhook
+// ----------------------
+// This endpoint is called by the Base App when certain events occur
+// related to the Mini App experience (e.g., "experience.saved").
+// Currently, the handler only:
+// - reads the body,
+// - performs a console.log,
+// - returns { success: true }.
+// 
+// It can be expanded to:
+// - save metrics,
+// - record interaction history,
+// - trigger follow-up flows.
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

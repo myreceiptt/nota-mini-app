@@ -1,27 +1,115 @@
-# NOTA Mini App
+# MyReceipt Mini App (NOTA Mini App)
 
-NOTA Mini App is an experimental Mini App for the Base app and Farcaster, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.
+**MyReceipt Mini App** (a.k.a. **NOTA Mini App**) is an experimental Mini App for the **Base app** and **Farcaster**, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.
 
-The current default example is a simple “NOTA fortune” experience: a lightweight Mini App that can greet the user and surface short reflective lines (“NOTA of the day”) inside the Base app and Farcaster. Over time, this repository can evolve into a playground for NOTA-themed flows maintained by Prof. NOTA.
+It takes the NOTA concept and turns it into:
 
-This project uses:
+> **“Your onchain receipt of today.”**
 
-- **Next.js** (App Router) with TypeScript
-- **OnchainKit / MiniKit** for Base integration
-- **Farcaster Mini App SDK** for running inside Farcaster clients
+The current default experience is a simple **“NOTA fortune”** flow:
+
+- A user opens the Mini App inside the Base app or a Farcaster client.
+- The Mini App reads MiniKit context (including `displayName` / `username`).
+- The app generates a short “NOTA of the day” line from a curated template list.
+- That line is rendered as a **visual receipt card** (1074×1474 canvas) — a “living receipt” of the moment.
+- The user can:
+  - Get another receipt,
+  - Download the receipt image,
+  - Create a cast on Farcaster,
+  - Save / pin the Mini App.
+
+This repository is intentionally small and opinionated so that it can serve as a **playground for NOTA / MyReceipt flows** maintained by Prof. NOTA and Prof. NOTA Inc.:
+
+- Personalised NOTA content,
+- Per-user receipt history,
+- Eventual onchain integrations on Base (minting, stamping, proofs).
+
+---
+
+## Tech Stack
+
+- **Next.js 15** (App Router) with TypeScript
+- **OnchainKit / MiniKit** from Coinbase:
+  - `OnchainKitProvider` as the root provider (Base chain)
+  - `SafeArea`, `useMiniKit`, `useComposeCast`, `useAddFrame` for Mini App integration
+- **Farcaster Mini App manifest**:
+  - `minikit.config.ts` + `app/.well-known/farcaster.json/route.ts`
+- **Farcaster Mini App SDK / MiniKit runtime** for running in Farcaster clients & Base app
+- **`next/og`**:
+  - `/api/receipt` for generating image-based receipts
+- **`@farcaster/quick-auth`**:
+  - `/api/auth` to verify Farcaster JWTs when needed
+- **CSS Modules + global styles**:
+  - `app/page.module.css`, `app/success/page.module.css`, `app/globals.css`
+
+---
+
+## Project Structure
+
+High-level layout of the app:
+
+```text
+app/
+  layout.tsx                 # Root layout, SafeArea, OnchainKit RootProvider
+  rootProvider.tsx           # OnchainKitProvider for Base + MiniKit config
+  page.tsx                   # Main "MyReceipt of Today" experience
+  page.module.css            # Styles for the main page (card, buttons, layout)
+  globals.css                # Global styles
+
+  success/
+    page.tsx                 # "Success" page (e.g. after Base app flows)
+    page.module.css          # Styles for the success page
+
+  api/
+    webhook/route.ts         # Base Mini App webhook (currently logs events)
+    receipt/route.tsx        # Image generator for receipts (next/og)
+    auth/route.ts            # Farcaster JWT verification endpoint (quick-auth)
+
+  .well-known/
+    farcaster.json/route.ts  # Farcaster Mini App manifest generator
+
+minikit.config.ts            # Source-of-truth Mini App config for Base/Farcaster
+public/                      # Static assets (icons, hero images, etc.)
+```
+
+---
+
+### Main user flow (current version)
+
+1. The user opens MyReceipt inside the Base app or a Farcaster client.
+2. `app/layout.tsx` wraps the tree with:
+
+   - `RootProvider` (OnchainKitProvider for Base + MiniKit)
+   - `SafeArea` (MiniKit utility for in-frame rendering)
+
+3. `app/page.tsx`:
+
+   - Reads user context via `useMiniKit` (e.g. `displayName`, `username`)
+   - Picks a template from `receiptTemplates.ts` using `generateReceipt(displayName)`
+   - Renders the NOTA text into a 1074×1474 `<canvas>` (the “receipt card”)
+   - Converts the canvas into a `data:` URL for download
+   - Provides actions:
+
+     - Get another receipt (refresh the NOTA text),
+     - Download the card,
+     - Save/pin the Mini App (`useAddFrame`),
+     - Share as a cast (`useComposeCast`).
+
+4. `/api/receipt` exposes an alternative “server-side receipt image” endpoint.
+5. `/api/webhook` is wired for Base Mini App webhooks and can be extended to log metrics or events.
 
 ---
 
 ## Prerequisites
 
-To use and extend this project in the way it was designed, you should have:
+To use and extend this project the way it was designed, you’ll eventually want:
 
 - A **Base app** account
 - A **Farcaster** account
 - A **Vercel** account (for hosting)
-- A **Coinbase Developer Platform** (CDP) API key for OnchainKit / MiniKit
+- A **Coinbase Developer Platform (CDP)** API key for OnchainKit / MiniKit
 
-These are not required just to explore the code locally on your own machine, but they are needed once you want to ship the Mini App publicly in a compliant way.
+These are **not required** just to explore the code locally, but are needed if you want to ship the Mini App publicly inside Base and Farcaster.
 
 ---
 
@@ -38,6 +126,8 @@ cd nota-mini-app
 
 ```bash
 npm install
+# or
+pnpm install
 ```
 
 ### 3. Configure environment variables
@@ -57,18 +147,28 @@ NEXT_PUBLIC_URL=
 ```
 
 - `NEXT_PUBLIC_PROJECT_NAME`
-  A human-readable name that can be shown in the UI.
+  Human-readable project name shown in the UI and/or metadata.
 
 - `NEXT_PUBLIC_ONCHAINKIT_API_KEY`
   Your CDP API key used by OnchainKit / MiniKit to talk to Base.
 
 - `NEXT_PUBLIC_URL`
-  The public URL of your deployed app (leave blank while developing locally).
+  The public URL of your deployed app (keep this empty while developing locally).
+
+The code may also rely on Vercel-injected environment variables during deployment:
+
+- `VERCEL_ENV`
+- `VERCEL_PROJECT_PRODUCTION_URL`
+- `VERCEL_URL`
+
+These are set automatically by Vercel and usually don’t need to be added manually for local development.
 
 ### 4. Run locally
 
 ```bash
 npm run dev
+# or
+pnpm dev
 ```
 
 Open your browser and go to:
@@ -77,13 +177,13 @@ Open your browser and go to:
 http://localhost:3000
 ```
 
-You should see the NOTA Mini App running in your local environment.
+You should see the MyReceipt / NOTA Mini App running in your local environment.
+
+> Note: Some MiniKit features that depend on host context (Base app / Farcaster) will only function fully when the app is embedded as a Mini App in a compatible client.
 
 ---
 
-## Customisation
-
-### Mini App Manifest Configuration
+## Mini App Manifest Configuration
 
 The file `minikit.config.ts` defines the configuration that is used to generate the Mini App manifest at:
 
@@ -94,17 +194,25 @@ app/.well-known/farcaster.json
 This manifest is read by both Farcaster and the Base app to understand:
 
 - The name and description of your Mini App
-- The icons and images to use
-- How to display the Mini App as an embed and launchable action
+- Icons and images to use
+- How to display the Mini App as an embed and as a launchable action
+- Webhook configuration (e.g. `webhookUrl` pointing to `/api/webhook`)
 
-To personalise your NOTA Mini App:
+To personalise your NOTA / MyReceipt Mini App:
 
 1. Open `minikit.config.ts`.
-2. Update fields such as `name`, `subtitle`, and `description`.
-3. Put any custom images in the `/public` folder.
-4. Update the image URLs in `minikit.config.ts` to point at your assets.
+2. Update fields such as:
 
-You can skip the `accountAssociation` configuration at first. That step is only needed when you want to cryptographically associate the Mini App domain with your Farcaster account.
+   - `name`,
+   - `subtitle`,
+   - `description`,
+   - `tags`,
+   - image URLs (hero image, icon, etc.).
+
+3. Put any custom images in the `/public` folder.
+4. Update the image URLs in `minikit.config.ts` to point to your assets.
+
+You can skip the `accountAssociation` configuration at first. That step is only needed when you want to **cryptographically associate** the Mini App domain with your Farcaster account.
 
 ---
 
@@ -118,7 +226,7 @@ You can deploy this project using the Vercel CLI or the Vercel dashboard.
 vercel --prod
 ```
 
-After a successful deployment you should get a URL similar to:
+After a successful deployment, you should get a URL similar to:
 
 ```text
 https://your-vercel-project-name.vercel.app/
@@ -134,9 +242,11 @@ NEXT_PUBLIC_ONCHAINKIT_API_KEY=<REPLACE_WITH_YOUR_CDP_API_KEY>
 NEXT_PUBLIC_URL=https://your-vercel-project-name.vercel.app/
 ```
 
+If you have a custom domain (for example `https://mini.endhonesa.com`), use that as `NEXT_PUBLIC_URL` instead.
+
 ### 3. Sync environment variables to Vercel
 
-To make sure your production deployment has the same values:
+To ensure your production deployment has the same values:
 
 ```bash
 vercel env add NEXT_PUBLIC_PROJECT_NAME production
@@ -150,7 +260,7 @@ Follow the prompts to paste the values from your `.env.local` file.
 
 ## Account Association with Farcaster
 
-When you are ready to formally associate your NOTA Mini App with your Farcaster account, you can sign the manifest and embed the resulting proof.
+When you are ready to formally associate your NOTA / MyReceipt Mini App with your Farcaster account, you can sign the manifest and embed the resulting proof.
 
 ### 1. Generate an `accountAssociation` object
 
@@ -170,8 +280,8 @@ export const minikitConfig = {
     payload: "your-payload-here",
     signature: "your-signature-here",
   },
-  frame: {
-    // ...rest of your frame / Mini App configuration
+  miniapp: {
+    // ...rest of your Mini App configuration
   },
 };
 ```
@@ -184,21 +294,42 @@ After you commit this change and redeploy, the manifest at `/.well-known/farcast
 vercel --prod
 ```
 
-This will publish the updated manifest.
+This will publish the updated manifest and associated proof.
 
 ---
 
 ## Roadmap / Ideas
 
-This repository is intentionally small and opinionated so that it can serve as a playground for NOTA experiments maintained by Prof. NOTA and Prof. NOTA Inc.
+This repository is intended as a living playground for NOTA-themed experiments by Prof. NOTA and Prof. NOTA Inc. Some natural next steps include:
 
-Possible future experiments include:
+- **Alternative NOTA / MyReceipt experiences**
 
-- Alternative NOTA experiences (e.g. “NOTA of the day”, reflections, prompts)
-- Simple onchain actions via Base Accounts (minting, stamping, proof-of-presence)
-- Small utilities around $myreceipt or other Prof. NOTA narratives
+  - “NOTA of the day”
+  - Reflection prompts
+  - User-authored receipts (“My receipt of today is…”)
 
-Any actual use, remix, or redistribution of this codebase must follow the terms described in the `LICENSE` file. If you are interested in collaborations or specific permissions, please reach out using the contact information in `LICENSE`.
+- **Personalisation**
+
+  - Allow users to append or fully author their own MyReceipt text
+  - Different “modes” (random template vs. custom-first)
+
+- **Receipt history (offchain)**
+
+  - Store per-user receipt logs keyed by Farcaster `fid`
+  - Surface recent receipts as a personal timeline or “ledger”
+
+- **Webhook + metrics**
+
+  - Use `/api/webhook` to log Base Mini App events (e.g. saves, launches)
+  - Simple dashboards / stats around MyReceipt usage
+
+- **Onchain hooks (Base)**
+
+  - Mint or “stamp” a MyReceipt as an onchain artefact
+  - Proof-of-presence / proof-of-reflection flows
+  - Tiny utilities around **$myreceipt** or other Prof. NOTA narratives (purely experimental, non-financial)
+
+Any actual use, remix, or redistribution of this codebase must follow the terms described in the `LICENSE` file. If you are interested in collaborations or specific permissions, please refer to the contact information in `LICENSE`.
 
 ---
 
@@ -206,7 +337,7 @@ Any actual use, remix, or redistribution of this codebase must follow the terms 
 
 This repository started from a public demo template intended for learning how to build Mini Apps for the Base app and Farcaster. It is provided for **educational and experimental purposes** within the boundaries defined in the `LICENSE` file.
 
-- There is **no official token, cryptocurrency, or investment product** associated with this repository, with NOTA Mini App, or with the examples shown here.
+- There is **no official token, cryptocurrency, or investment product** associated with this repository, with NOTA Mini App / MyReceipt Mini App, or with the examples shown here.
 - Any external token, app, or social account claiming to be “officially” tied to Coinbase, Base, or to this demo should be treated with caution and independently verified.
 - Never sign transactions or connect wallets to untrusted sites.
 
