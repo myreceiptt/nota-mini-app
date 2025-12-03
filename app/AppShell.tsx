@@ -4,6 +4,14 @@ import { ReactNode } from "react";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import styles from "./page.module.css";
 
+type MiniKitUser = {
+  displayName?: string | null;
+  username?: string | null;
+  pfp?: { url?: string | null } | null;
+  pfpUrl?: string | null;
+  avatarUrl?: string | null;
+};
+
 type AppShellProps = {
   header?: ReactNode;
   footer?: ReactNode;
@@ -16,7 +24,7 @@ export function AppShell({ header, footer, children }: AppShellProps) {
   let displayName = "OiOi";
   let avatarUrl: string | undefined;
 
-  const user = (context as any)?.user;
+  const user = (context as { user?: MiniKitUser } | null)?.user;
 
   if (user) {
     if (
@@ -32,19 +40,17 @@ export function AppShell({ header, footer, children }: AppShellProps) {
     }
 
     avatarUrl =
-      (user.pfp && (user.pfp as any).url) ||
-      (user.pfpUrl as string | undefined) ||
-      (user.avatarUrl as string | undefined) ||
+      user.pfp?.url ||
+      user.pfpUrl ||
+      user.avatarUrl ||
       undefined;
   }
-
-  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <div className={styles.appRoot}>
       {/* NavBar */}
       <header className={styles.navbar}>
-        <div className={styles.navTitle}>MyReceipt</div>
+        <div className={styles.navTitle}>$MyReceipt</div>
         <div className={styles.navRight}>
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -54,7 +60,13 @@ export function AppShell({ header, footer, children }: AppShellProps) {
               className={styles.navAvatar}
             />
           ) : (
-            <div className={styles.navAvatarFallback}>{initial}</div>
+            // Fallback: icon.png
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src="/icon.png"
+              alt="MyReceipt icon"
+              className={styles.navAvatar}
+            />
           )}
         </div>
       </header>

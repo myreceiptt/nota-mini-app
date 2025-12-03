@@ -345,8 +345,6 @@ export function generateReceipt(rawName?: string | null): string {
 }
 
 export function getMaxReceiptLength(_rawName?: string | null): number {
-  // Maksimal displayName yang kita asumsikan
-  const MAX_DISPLAY_NAME_LENGTH = 32;
   const dummyName = "12345678901234567890123456789012"; // 32 karakter
 
   const max = RECEIPT_TEMPLATES.reduce((currentMax, template) => {

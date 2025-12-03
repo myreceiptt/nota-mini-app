@@ -1,19 +1,20 @@
 "use client";
+
 import { ReactNode } from "react";
 import { base } from "wagmi/chains";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import "@coinbase/onchainkit/styles.css";
 
-// RootProvider
-// -------------
-// Wraps the entire application with the OnchainKitProvider for the Base chain.
-// MiniKit integration is also enabled here so that:
-// - The Mini App can read context from the host (Base App / Farcaster).
-// - OnchainKit components (wallet, tx, etc.) can be used within the React tree.
-//
-// The API key is retrieved from NEXT_PUBLIC_ONCHAINKIT_API_KEY.
+type RootProviderProps = {
+  children: ReactNode;
+};
 
-export function RootProvider({ children }: { children: ReactNode }) {
+// RootProvider
+// ------------
+// Wraps the entire React tree with OnchainKitProvider for Base.
+// MiniKit is enabled so the Mini App can read host context
+// (Base App / Farcaster) and use OnchainKit components.
+export function RootProvider({ children }: RootProviderProps) {
   return (
     <OnchainKitProvider
       apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}

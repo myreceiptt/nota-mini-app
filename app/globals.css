@@ -11,6 +11,12 @@
     }
   }
 
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
   html,
   body {
     max-width: 100vw;
@@ -20,10 +26,15 @@
   body {
     color: var(--foreground);
     background: var(--background);
-    /* gunakan font console: Source Code Pro jadi default */
+    /* default font: Source Code Pro console-style */
     font-family: var(--font-source-code-pro), monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
   }
 
   code {
@@ -40,20 +51,7 @@
       background-color: #111111;
       border: 1px solid #474747;
     }
-  }
 
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  @media (prefers-color-scheme: dark) {
     html {
       color-scheme: dark;
     }

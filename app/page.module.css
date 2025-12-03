@@ -44,7 +44,7 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  border: 2px solid #ffffff;
+  border: 1px solid #ffffff;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -92,6 +92,14 @@
   margin: 0 auto;
 }
 
+/* Panel hitam di belakang kartu receipt */
+.receiptSection {
+  margin: 0 auto 1.75rem;
+  max-width: 640px;
+  width: 100%;
+}
+
+/* ========================= */
 .container {
   display: flex;
   flex-direction: column;
@@ -141,43 +149,44 @@
   max-width: 360px;
   width: 100%;
   border-radius: 12px;
-  background: #ffffff;
   border: 1px solid #e0e0e0;
-  padding: 0;
   overflow: hidden;
-
-  /* Biar ukuran kartu stabil */
   position: relative;
   aspect-ratio: 1074 / 1474;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* tinggi kartu konsisten */
+  background: #ffffff;
 }
 
 .notaImage {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 /* Text fallback kalau image gagal total */
-.notaText {
-  font-size: 1rem;
-  line-height: 1.7;
-  padding: 2rem 1.5rem;
-  width: 100%;
-  height: 100%;
+.notaTextWrapper {
+  position: absolute;
+  inset: 0;
+  background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.notaText {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #ffffff;
   text-align: center;
 }
 
+
 /* Loader sphere.svg di tengah kartu */
 .notaLoader {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,7 +195,27 @@
 .notaLoaderImage {
   width: 64px;
   height: 64px;
-  animation: notaLoaderInvert 1.2s linear infinite;
+  animation: notaPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes notaPulse {
+  0% {
+    filter: invert(0);
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+
+  50% {
+    filter: invert(1);
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    filter: invert(0);
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
 }
 
 @keyframes notaLoaderInvert {

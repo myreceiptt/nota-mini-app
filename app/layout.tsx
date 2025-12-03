@@ -5,11 +5,10 @@ import { minikitConfig } from "../minikit.config";
 import { RootProvider } from "./rootProvider";
 import "./globals.css";
 
-// Generate Metadata
-// ----------------
-// Generates default metadata for the Mini App, including
-// fc:frame JSON that is read by the Farcaster client/Mini App host.
-// Values ​​are taken from minikitConfig.miniapp.
+// generateMetadata
+// -----------------
+// Default metadata for the Mini App, including fc:frame
+// that Farcaster reads from the HTML head.
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: minikitConfig.miniapp.name,
@@ -42,11 +41,9 @@ const sourceCodePro = Source_Code_Pro({
 
 // RootLayout
 // ----------
-// The root layout of the Next.js App Router.
-// Here:
-// - RootProvider mounts OnchainKitProvider (Base + MiniKit).
-// - SafeArea ensures the UI is safe within the Mini App frame.
-// - Inter + Source Code Pro fonts are attached to <body>.
+// - Wraps everything with OnchainKit (RootProvider).
+// - Uses SafeArea so UI stays within Mini App safe bounds.
+// - Attaches Inter + Source Code Pro to <body>.
 
 export default function RootLayout({
   children,
