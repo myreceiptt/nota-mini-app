@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { renderReceiptImage } from "../lib/receiptCanvas";
-import { generateReceipt, getMaxReceiptLength } from "../receiptTemplates";
+import { generateReceipt, getMaxReceiptLength } from "../lib/receiptTemplates";
 
 type UseReceiptContentResult = {
   currentNota: string;

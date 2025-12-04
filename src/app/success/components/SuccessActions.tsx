@@ -2,7 +2,7 @@
 
 import { RotateCcw, Coins, Pin, Share2 } from "lucide-react";
 
-import { IconButton } from "../../components/IconButton";
+import { IconButton } from "../../../components/IconButton";
 import styles from "./SuccessActions.module.css";
 
 type SuccessActionsProps = {

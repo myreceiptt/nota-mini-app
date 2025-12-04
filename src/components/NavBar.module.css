@@ -1,0 +1,44 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #000000;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 20;
+}
+
+.navTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navAvatar,
+.navAvatarFallback {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid #ffffff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justifyContent: center;
+}
+
+.navAvatarFallback {
+  font-size: 0.8rem;
+  font-weight: 600;
+}

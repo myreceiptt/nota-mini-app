@@ -3,10 +3,10 @@
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { useOpenReceipt } from "../hooks/useOpenReceipt";
+import { useOpenReceipt } from "../../hooks/useOpenReceipt";
 import styles from "../page.module.css";
-import cardStyles from "../components/ReceiptCard.module.css";
-import editorStyles from "../components/ReceiptEditor.module.css";
+import cardStyles from "../../components/ReceiptCard.module.css";
+import editorStyles from "../../components/ReceiptEditor.module.css";
 
 function OpenReceiptContent() {
   const searchParams = useSearchParams();

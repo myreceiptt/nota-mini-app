@@ -1,4 +1,4 @@
-import { RECEIPT_TEMPLATES, type TemplateFn } from "./lib/receiptTemplates.data";
+import { RECEIPT_TEMPLATES, type TemplateFn } from "./receiptTemplates.data";
 
 export type { TemplateFn };
 

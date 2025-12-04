@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
-import { NavBar } from "./components/NavBar";
+import { NavBar } from "../components/NavBar";
 import styles from "./page.module.css";
 
 type MiniKitUser = {

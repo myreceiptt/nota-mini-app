@@ -3,12 +3,12 @@
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useEffect } from "react";
 
-import { ActionsBar } from "./components/ActionsBar";
-import { ReceiptCard } from "./components/ReceiptCard";
-import { ReceiptEditor } from "./components/ReceiptEditor";
-import { useMiniAppActions } from "./hooks/useMiniAppActions";
-import { useReceiptContent } from "./hooks/useReceiptContent";
-import { minikitConfig } from "../minikit.config";
+import { ActionsBar } from "../components/ActionsBar";
+import { ReceiptCard } from "../components/ReceiptCard";
+import { ReceiptEditor } from "../components/ReceiptEditor";
+import { useMiniAppActions } from "../hooks/useMiniAppActions";
+import { useReceiptContent } from "../hooks/useReceiptContent";
+import { minikitConfig } from "../../minikit.config";
 import { AppShell } from "./AppShell";
 import styles from "./page.module.css";
 

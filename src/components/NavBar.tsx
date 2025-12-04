@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../page.module.css";
+import styles from "./NavBar.module.css";
 
 type NavBarProps = {
   title: string;

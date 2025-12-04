@@ -28,7 +28,7 @@ This repository is intentionally small and opinionated so that it can serve as a
 
 ## Tech Stack
 
-- **Next.js 15** (App Router) with TypeScript
+- **Next.js 15** (App Router, `app/` directory) with TypeScript
 - **OnchainKit / MiniKit** from Coinbase:
   - `OnchainKitProvider` as the root provider (Base chain)
   - `SafeArea`, `useMiniKit`, `useComposeCast`, `useAddFrame` for Mini App integration
@@ -39,64 +39,374 @@ This repository is intentionally small and opinionated so that it can serve as a
   - `/api/receipt` for generating image-based receipts
 - **`@farcaster/quick-auth`**:
   - `/api/auth` to verify Farcaster JWTs when needed
-- **CSS Modules + global styles**:
-  - `app/page.module.css`, `app/success/page.module.css`, `app/globals.css`
+- **Styling**:
+  - CSS Modules + global styles (`app/globals.css`)
+  - Component-scoped CSS modules co-located with key components
 
 ---
 
-## Project Structure
+## High-Level Architecture
 
-High-level layout of the app:
+The app is structured so that:
+
+- **Pages** (in `app/`) are thin and mostly compose hooks + components.
+- **Components** (in `app/components/` and `app/success/components/`) handle UI only.
+- **Hooks** (in `app/hooks/`) encapsulate behaviour and side effects.
+- **Lib** modules (in `app/lib/` + `app/receiptTemplates.ts`) handle environment, share text, templates, and canvas rendering.
+- **CSS** is split between:
+  - Page-level layout modules, and
+  - Component-scoped modules for visual details.
+
+### 1. Routing & Pages (`app/`)
+
+All routes use the App Router.
+
+- **`app/layout.tsx`**  
+  Root layout:
+
+  - Wraps the tree with `RootProvider` (`OnchainKitProvider` for Base + MiniKit).
+  - Includes `SafeArea` to render correctly inside host Mini App frames.
+
+- **`app/page.tsx` — Home / Main MyReceipt Experience**  
+  Thin page component that:
+
+  - Derives `displayName` / avatar from MiniKit context.
+  - Marks the Mini App frame as ready.
+  - Wires:
+    - `useReceiptContent` — receipt text + image state.
+    - `useMiniAppActions` — share / tips / pin / open handlers.
+  - Renders:
+    - `<AppShell>`
+    - `<ReceiptCard>`
+    - `<ReceiptEditor>`
+    - `<ActionsBar>`
+
+- **`app/open/page.tsx` — Open / Viewer**
+
+  - Uses an inner client component with `useSearchParams()` to read `?text=...&name=...`.
+  - Uses `useOpenReceipt(text, name)` to:
+    - Render the receipt image from text via the canvas helper.
+    - Handle copy + download actions.
+  - Reuses the same visual language as the home page.
+
+- **`app/success/page.tsx` — Success Screen**
+
+  - Uses `useSuccessActions()` for:
+    - Close / back behaviour.
+    - Get / Tips / Pin / Share actions.
+  - Renders:
+    - `<SuccessHero>` — avatar + main copy.
+    - `<SuccessActions>` — CTA buttons (built from `IconButton`).
+
+- **API routes (`app/api/`)**
+
+  - `app/api/webhook/route.ts`  
+    Base Mini App webhook (currently logs events, extendable for metrics).
+  - `app/api/receipt/route.tsx`  
+    Image generator for receipts via `next/og` (server-side alternative to canvas).
+  - `app/api/auth/route.ts`  
+    Farcaster JWT verification endpoint using `@farcaster/quick-auth`.
+
+- **Manifest route**
+  - `app/.well-known/farcaster.json/route.ts`  
+    Generates the Farcaster Mini App manifest from `minikit.config.ts`.
+
+---
+
+### 2. Layout & Components
+
+#### Layout
+
+- **`app/AppShell.tsx`**
+
+  - Shared layout shell used by pages.
+  - Renders `<NavBar>` and a content wrapper.
+
+- **`app/components/NavBar.tsx`**
+  - Header layout with:
+    - Title (e.g. `$MyReceipt`),
+    - Avatar URL,
+    - Display name.
+
+#### Shared UI Components (`app/components/`)
+
+- **`IconButton.tsx`**
+
+  - Reusable “icon + label” button shell.
+  - Used by `ActionsBar` and `SuccessActions` to keep CTAs consistent.
+
+- **`ReceiptCard.tsx`**
+
+  - Shows:
+    - Receipt image (canvas render result).
+    - Loader / “rendering…” state.
+    - Fallback when no image yet.
+  - Receives display text + display name from hooks.
+
+- **`ReceiptEditor.tsx`**
+
+  - Textarea/editor for the current receipt text.
+  - Shows text limit + “has changes” state.
+  - Buttons for:
+    - Apply / use this text.
+    - Open as image.
+
+- **`ActionsBar.tsx`**
+  - Footer action bar on the home page.
+  - Buttons (via `IconButton`) for:
+    - Get
+    - Tips
+    - Pin
+    - Share
+  - Behaviour is provided entirely by `useMiniAppActions`.
+
+#### Success Page Components (`app/success/components/`)
+
+- **`SuccessHero.tsx`**
+
+  - Avatar + hero text for the success state.
+
+- **`SuccessActions.tsx`**
+  - Buttons (via `IconButton`) for:
+    - Get
+    - Tips
+    - Pin
+    - Share
+  - Hooks into `useSuccessActions`.
+
+---
+
+### 3. Hooks (`app/hooks/`)
+
+Hooks centralize all behavioural logic.
+
+- **`useReceiptContent.ts`**
+
+  - Manages receipt text state and image generation.
+  - Uses `renderReceiptImage` from `app/lib/receiptCanvas`.
+  - Exposes:
+    - Editor text.
+    - Applied display text.
+    - Image data URL.
+    - `isRendering` state.
+    - Handlers for text change / apply / re-render.
+
+- **`useMiniAppActions.ts`**
+
+  - Encapsulates Mini App actions on the home page:
+    - Share to cast,
+    - Tips (open external URL),
+    - Pin Mini App,
+    - Open `/open` viewer.
+  - Uses:
+    - `getBaseUrl` / `getTipUrl` from `app/lib/env`.
+    - Share text builders from `app/lib/shareText`.
+    - MiniKit APIs (`useComposeCast`, `useAddFrame`, etc.).
+
+- **`useOpenReceipt.ts`**
+
+  - For the `/open` route.
+  - Given `text` + `name`:
+    - Triggers `renderReceiptImage`.
+    - Exposes image data URL + loading state.
+    - Handles copy + download actions.
+
+- **`useSuccessActions.ts`**
+  - Success page logic:
+    - Close / back behaviour.
+    - Get / Tips / Pin / Share actions.
+  - Also uses env + shareText helpers and `minikit.config`.
+
+---
+
+### 4. Lib / Helpers
+
+Located mostly under `app/lib/` plus one thin helper at `app/receiptTemplates.ts`.
+
+#### Environment & URLs (`app/lib/env.ts`)
+
+- `getBaseUrl()`  
+  Derives app base URL from `NEXT_PUBLIC_URL`,  
+  falling back to `https://mini.endhonesa.com`.
+
+- `getTipUrl()`  
+  Derives tip URL from `NEXT_PUBLIC_TIP_URL`,  
+  falling back to `https://warpcast.com/myreceipt`.
+
+#### Share Text Helpers (`app/lib/shareText.ts`)
+
+- `buildShareText(body: string)`  
+  Main share/cast text (e.g. “My Receipt of Today…” style).
+
+- `buildTipCastText()`  
+  Generated text for tip/support casts.
+
+- `buildSuccessShareText(miniappName: string)`  
+  Text used on the success page when sharing.
+
+Updating copy here changes behaviour across the app without touching components.
+
+#### Receipt Templates & Canvas
+
+- **`app/lib/receiptTemplates.data.ts`**
+
+  - `TemplateFn` type.
+  - `RECEIPT_TEMPLATES` array (all receipt templates; data-only).
+
+- **`app/receiptTemplates.ts`**
+
+  - Thin helper that:
+    - Re-exports `TemplateFn`.
+    - Provides:
+      - `generateReceipt(...)`
+      - `getMaxReceiptLength()`
+    - Internally imports `RECEIPT_TEMPLATES` from `.data.ts`.
+
+- **`app/lib/receiptCanvas.ts`**
+  - Handles canvas-based receipt rendering:
+    - Text wrapping,
+    - Drawing header/body/footer,
+    - Generating a PNG data URL.
+  - Export:
+    - `renderReceiptImage(text: string, name: string): Promise<string>`
+
+#### Mini App Config
+
+- **`minikit.config.ts`**
+  - Source-of-truth configuration for the Mini App.
+  - Used by `app/.well-known/farcaster.json/route.ts` to emit the manifest consumed by Base and Farcaster.
+
+---
+
+### 5. Styling (`app/globals.css` + CSS Modules)
+
+Styling is intentionally simple and split into:
+
+- **Global styles**
+
+  - `app/globals.css`  
+    Resets, box-sizing, base typography, global colors, dark-mode preferences.
+
+- **Page-level CSS Modules**
+
+  - `app/page.module.css`  
+    Layout + shell-level styles for the main page and shared structures.
+  - `app/success/page.module.css`  
+    Layout + typography for the success page shell.
+
+- **Component-scoped CSS Modules**
+  - `app/components/ReceiptCard.module.css`
+  - `app/components/ReceiptEditor.module.css`
+  - `app/components/ActionsBar.module.css`
+  - `app/success/components/SuccessHero.module.css`
+  - `app/success/components/SuccessActions.module.css`
+
+Each visual component imports its own `.module.css`, so if you want to tweak a specific piece, you go straight to:
+
+> `X.tsx` + `X.module.css`
+
+There is no Tailwind in this project at the moment.
+
+---
+
+## Project Structure (Filesystem)
+
+High-level layout of the app (reflecting the current architecture):
 
 ```text
 app/
-  layout.tsx                 # Root layout, SafeArea, OnchainKit RootProvider
-  rootProvider.tsx           # OnchainKitProvider for Base + MiniKit config
-  page.tsx                   # Main "MyReceipt of Today" experience
-  page.module.css            # Styles for the main page (card, buttons, layout)
-  globals.css                # Global styles
+  layout.tsx
+  rootProvider.tsx
+  AppShell.tsx
+
+  globals.css
+  page.tsx
+  page.module.css
+
+  open/
+    page.tsx
 
   success/
-    page.tsx                 # "Success" page (e.g. after Base app flows)
-    page.module.css          # Styles for the success page
+    page.tsx
+    page.module.css
+    components/
+      SuccessHero.tsx
+      SuccessHero.module.css
+      SuccessActions.tsx
+      SuccessActions.module.css
+
+  components/
+    NavBar.tsx
+    IconButton.tsx
+    ReceiptCard.tsx
+    ReceiptCard.module.css
+    ReceiptEditor.tsx
+    ReceiptEditor.module.css
+    ActionsBar.tsx
+    ActionsBar.module.css
+
+  hooks/
+    useReceiptContent.ts
+    useMiniAppActions.ts
+    useOpenReceipt.ts
+    useSuccessActions.ts
+
+  lib/
+    env.ts
+    shareText.ts
+    receiptCanvas.ts
+    receiptTemplates.data.ts
+
+  receiptTemplates.ts
 
   api/
-    webhook/route.ts         # Base Mini App webhook (currently logs events)
-    receipt/route.tsx        # Image generator for receipts (next/og)
-    auth/route.ts            # Farcaster JWT verification endpoint (quick-auth)
+    webhook/route.ts
+    receipt/route.tsx
+    auth/route.ts
 
   .well-known/
-    farcaster.json/route.ts  # Farcaster Mini App manifest generator
+    farcaster.json/route.ts
 
-minikit.config.ts            # Source-of-truth Mini App config for Base/Farcaster
-public/                      # Static assets (icons, hero images, etc.)
+minikit.config.ts
+public/
 ```
 
 ---
 
-### Main user flow (current version)
+## Main User Flow (Current Version)
 
 1. The user opens MyReceipt inside the Base app or a Farcaster client.
 2. `app/layout.tsx` wraps the tree with:
 
-   - `RootProvider` (OnchainKitProvider for Base + MiniKit)
-   - `SafeArea` (MiniKit utility for in-frame rendering)
+   - `RootProvider` (OnchainKitProvider for Base + MiniKit),
+   - `SafeArea` (MiniKit utility for in-frame rendering).
 
 3. `app/page.tsx`:
 
-   - Reads user context via `useMiniKit` (e.g. `displayName`, `username`)
-   - Picks a template from `receiptTemplates.ts` using `generateReceipt(displayName)`
-   - Renders the NOTA text into a 1074×1474 `<canvas>` (the “receipt card”)
-   - Converts the canvas into a `data:` URL for download
-   - Provides actions:
+   - Reads user context via MiniKit hooks (`displayName`, `username`, etc.).
+   - Generates a NOTA line from `generateReceipt(...)`.
+   - Uses `useReceiptContent` to manage the text and trigger canvas rendering.
+   - Converts the canvas output into a `data:` URL used by `ReceiptCard`.
+   - Provides actions via:
 
-     - Get another receipt (refresh the NOTA text),
-     - Download the card,
-     - Save/pin the Mini App (`useAddFrame`),
-     - Share as a cast (`useComposeCast`).
+     - `useMiniAppActions` → share, tips, pin, open viewer.
 
-4. `/api/receipt` exposes an alternative “server-side receipt image” endpoint.
-5. `/api/webhook` is wired for Base Mini App webhooks and can be extended to log metrics or events.
+4. `/open`:
+
+   - Reads text + name from query string.
+   - Uses `useOpenReceipt` to render, copy, and download the receipt image.
+
+5. `/success`:
+
+   - Uses `useSuccessActions` for the final action set.
+
+6. `/api/receipt`:
+
+   - Alternative, server-side image generator.
+
+7. `/api/webhook`:
+
+   - Receives Base Mini App events for logging/metrics.
 
 ---
 
