@@ -81,14 +81,6 @@ export default function Home() {
           onPin={handleSaveMiniApp}
           onShare={handleShare}
           isSharing={isSharing}
-          styles={{
-            actions: styles.actions,
-            actionRow: styles.actionRow,
-            iconButton: styles.iconButton,
-            primaryAction: styles.primaryAction,
-            iconGlyph: styles.iconGlyph,
-            iconLabel: styles.iconLabel,
-          }}
         />
       }
     >
@@ -98,15 +90,6 @@ export default function Home() {
           isRendering={isRendering}
           displayText={displayText}
           displayName={displayName}
-          styles={{
-            receiptSection: styles.receiptSection,
-            notaCard: styles.notaCard,
-            notaImage: styles.notaImage,
-            notaLoader: styles.notaLoader,
-            notaLoaderImage: styles.notaLoaderImage,
-            notaTextWrapper: styles.notaTextWrapper,
-            notaText: styles.notaText,
-          }}
         />
 
         <ReceiptEditor
@@ -117,14 +100,6 @@ export default function Home() {
           onApply={handleApplyEdits}
           onOpen={handleOpenStandalone}
           displayText={displayText}
-          styles={{
-            appendSection: styles.appendSection,
-            appendLabel: styles.appendLabel,
-            appendTextarea: styles.appendTextarea,
-            appendHint: styles.appendHint,
-            appendActions: styles.appendActions,
-            secondaryButton: styles.secondaryButton,
-          }}
         />
       </>
     </AppShell>

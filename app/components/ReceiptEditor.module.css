@@ -1,0 +1,95 @@
+.appendSection {
+  margin: 1.5rem auto 0;
+  max-width: 360px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.appendLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #222222;
+}
+
+.appendTextarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  color: #111111;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.appendTextarea::placeholder {
+  color: #a0a0a0;
+}
+
+.appendHint {
+  font-size: 0.75rem;
+  color: #777777;
+}
+
+.appendActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.secondaryButton {
+  margin: 0.75rem auto 0;
+  max-width: 360px;
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid #111111;
+  background: transparent;
+  color: #111111;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: #111111;
+  color: #ffffff;
+}
+
+.secondaryButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .appendSection {
+    max-width: 100%;
+  }
+
+  .secondaryButton {
+    max-width: 100%;
+  }
+
+  .appendActions {
+    width: 100%;
+  }
+}

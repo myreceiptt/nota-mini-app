@@ -1,19 +1,12 @@
 "use client";
 
+import styles from "./ReceiptCard.module.css";
+
 type ReceiptCardProps = {
   imageDataUrl: string | null;
   isRendering: boolean;
   displayText: string;
   displayName: string;
-  styles: {
-    receiptSection: string;
-    notaCard: string;
-    notaImage: string;
-    notaLoader: string;
-    notaLoaderImage: string;
-    notaTextWrapper: string;
-    notaText: string;
-  };
 };
 
 export function ReceiptCard({
@@ -21,7 +14,6 @@ export function ReceiptCard({
   isRendering,
   displayText,
   displayName,
-  styles,
 }: ReceiptCardProps) {
   return (
     <section className={styles.receiptSection}>

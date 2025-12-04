@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "./ReceiptEditor.module.css";
+
 type ReceiptEditorProps = {
   editorText: string;
   onChange: (value: string) => void;
@@ -8,14 +10,6 @@ type ReceiptEditorProps = {
   onApply: () => void;
   onOpen: () => void;
   displayText: string;
-  styles: {
-    appendSection: string;
-    appendLabel: string;
-    appendTextarea: string;
-    appendHint: string;
-    appendActions: string;
-    secondaryButton: string;
-  };
 };
 
 export function ReceiptEditor({
@@ -26,7 +20,6 @@ export function ReceiptEditor({
   onApply,
   onOpen,
   displayText,
-  styles,
 }: ReceiptEditorProps) {
   return (
     <section className={styles.appendSection}>

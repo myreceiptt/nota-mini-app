@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 
 import { useOpenReceipt } from "../hooks/useOpenReceipt";
 import styles from "../page.module.css";
+import cardStyles from "../components/ReceiptCard.module.css";
+import editorStyles from "../components/ReceiptEditor.module.css";
 
 function OpenReceiptContent() {
   const searchParams = useSearchParams();
@@ -41,37 +43,40 @@ function OpenReceiptContent() {
             download this receipt.
           </p>
 
-          <div className={styles.notaCard}>
+          <div className={cardStyles.notaCard}>
             {imageDataUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={imageDataUrl}
                 alt="MyReceipt"
-                className={styles.notaImage}
+                className={cardStyles.notaImage}
               />
             ) : isRendering ? (
-              <div className={styles.notaLoader}>
+              <div className={cardStyles.notaLoader}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/sphere.svg"
                   alt="Loading receipt…"
-                  className={styles.notaLoaderImage}
+                  className={cardStyles.notaLoaderImage}
                 />
               </div>
             ) : (
-              <p className={styles.notaText}>{text}</p>
+              <p className={cardStyles.notaText}>{text}</p>
             )}
           </div>
 
           {copyStatus && (
-            <p className={styles.appendHint} style={{ marginTop: "0.5rem" }}>
+            <p
+              className={editorStyles.appendHint}
+              style={{ marginTop: "0.5rem" }}
+            >
               {copyStatus}
             </p>
           )}
 
           <button
             type="button"
-            className={styles.secondaryButton}
+            className={editorStyles.secondaryButton}
             onClick={handleCopyImage}
             disabled={!imageDataUrl}
           >
@@ -80,7 +85,7 @@ function OpenReceiptContent() {
 
           <button
             type="button"
-            className={styles.secondaryButton}
+            className={editorStyles.secondaryButton}
             onClick={handleDownloadImage}
             disabled={!imageDataUrl}
           >

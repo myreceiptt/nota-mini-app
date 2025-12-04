@@ -3,6 +3,7 @@
 import { RotateCcw, Download, Pin, Share2 } from "lucide-react";
 
 import { IconButton } from "./IconButton";
+import styles from "./ActionsBar.module.css";
 
 type ActionsBarProps = {
   onGet: () => void;
@@ -10,14 +11,6 @@ type ActionsBarProps = {
   onPin: () => void;
   onShare: () => void;
   isSharing: boolean;
-  styles: {
-    actions: string;
-    actionRow: string;
-    iconButton: string;
-    primaryAction: string;
-    iconGlyph: string;
-    iconLabel: string;
-  };
 };
 
 export function ActionsBar({
@@ -26,8 +19,7 @@ export function ActionsBar({
   onPin,
   onShare,
   isSharing,
-    styles,
-  }: ActionsBarProps) {
+}: ActionsBarProps) {
   return (
     <div className={styles.actions}>
       <div className={styles.actionRow}>

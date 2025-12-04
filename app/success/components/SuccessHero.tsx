@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import Image from "next/image";
 
-import styles from "../page.module.css";
+import styles from "./SuccessHero.module.css";
 
 type SuccessHeroProps = {
   children: ReactNode;
