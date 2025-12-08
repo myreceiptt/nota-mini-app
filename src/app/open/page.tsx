@@ -1,98 +1,165 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-
-import { useOpenReceipt } from "../../hooks/useOpenReceipt";
-import styles from "../page.module.css";
-import cardStyles from "../../components/ReceiptCard.module.css";
-import editorStyles from "../../components/ReceiptEditor.module.css";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { NavBar } from "@/components/NavBar";
+import { HeaderTitle } from "@/components/HeaderTitle";
+import { HeaderContent } from "@/components/HeaderContent";
+import { ReceiptImage } from "@/components/ReceiptImage";
+import { ReceiptDownload } from "@/components/ReceiptDownload";
+import { Footer } from "@/components/Footer";
+import { useMiniAppUser } from "@/hooks/useMiniAppUser";
+import { useReceiptOpen } from "@/hooks/useReceiptOpen";
+import { useMiniAppActions } from "@/hooks/useMiniAppActions";
+import { getBaseUrl } from "@/lib/env";
+import { buildOpenShareText } from "@/lib/shareText";
+import styles from "@/styles/pages/page.module.css";
 
 function OpenReceiptContent() {
+  const router = useRouter();
+  const { isFrameReady, setFrameReady } = useMiniKit();
+  const { displayName, avatarUrl } = useMiniAppUser();
+
   const searchParams = useSearchParams();
-  const text = searchParams.get("text") ?? "";
+  const rawText = searchParams.get("text") ?? "";
   const name = searchParams.get("name") ?? "OiOi";
 
-  const { imageDataUrl, isRendering, copyStatus, handleCopyImage, handleDownloadImage } =
-    useOpenReceipt(text, name);
+  // Apakah ada receipt asli dari URL?
+  const hasText = rawText.trim().length > 0;
 
-  if (!text) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.content}>
-          <div className={styles.shell}>
-            <h1 className={styles.title}>MyReceipt image</h1>
-            <p className={styles.subtitle}>
-              No receipt text was provided. Please open this page from the
-              MyReceipt Mini App.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Pesan fallback kalau tidak ada receipt
+  const emptyMessage =
+    "No receipt to open yet.\nTry generating one from the Home page first.";
+
+  // Text yang akan DITAMPILKAN di kartu
+  const displayText = hasText ? rawText : emptyMessage;
+
+  // Default hint (juga akan dipakai sebagai nilai awal statusMessage)
+  const saveHint =
+    "Long-press the image to save it, or use the buttons below to copy or download your receipt.";
+
+  // Status yang akan menggantikan saveHint setelah Copy/Save
+  const [statusMessage, setStatusMessage] = useState<string>(saveHint);
+
+  const { imageDataUrl, isRendering, handleCopyImage, handleDownloadImage } =
+    useReceiptOpen(rawText, name, {
+      onStatusChange: setStatusMessage,
+      messages: {
+        copyUnsupported: "Copy image is not supported in this browser.",
+        copySuccess: "Image copied to clipboard.",
+        copyFailed: "Failed to copy image.",
+        saveUnsupported: "Save image is not supported in this browser.",
+        saveSuccess: "Image downloaded and saved.",
+        saveFailed: "Failed to save image.",
+      },
+    });
+
+  // Embed URL spesifik untuk halaman /open (+ query text & name bila ada)
+  const baseOrigin = getBaseUrl();
+  const openEmbedUrl = hasText
+    ? `${baseOrigin}/open?text=${encodeURIComponent(
+        rawText
+      )}&name=${encodeURIComponent(name)}`
+    : baseOrigin;
+
+  // Actions untuk Footer: pakai body = rawText (bukan displayText),
+  // supaya kalau tidak ada receipt asli, Share akan otomatis NO-OP.
+  const { isSharing, handleTips, handleSaveMiniApp, handleShare } =
+    useMiniAppActions({
+      body: rawText,
+      displayName,
+      buildShareText: buildOpenShareText,
+      embedUrl: openEmbedUrl,
+    });
+
+  // Mark Mini App ready
+  useEffect(() => {
+    if (!isFrameReady) {
+      setFrameReady();
+    }
+  }, [isFrameReady, setFrameReady]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
+    <div className={styles.appRoot}>
+      {/* NavBar */}
+      <NavBar
+        titleLink="#"
+        titleLabel="Open $MyReceipt Swap Page"
+        title="$MyReceipt"
+        avatarLink="#"
+        avatarLabel="Open User Profile"
+        avatarUrl={avatarUrl}
+        displayName={displayName}
+        fallbackIcon="/icon.png"
+        altIcon="MyReceipt Icon"
+      />
+
+      {/* Main Content */}
+      <main className={styles.main}>
         <div className={styles.shell}>
-          <h1 className={styles.title}>MyReceipt image</h1>
+          {/* Header */}
+          <HeaderTitle>Image of Receipt</HeaderTitle>
+          <HeaderContent>
+            <>
+              Hi, <strong>{displayName}</strong>! This is an image of a small
+              receipt — a short line that nudges how we see today. Save and
+              share it.
+            </>
+          </HeaderContent>
 
-          <p className={styles.subtitle}>
-            Long-press the image to save it, or use the buttons below to copy or
-            download this receipt.
-          </p>
+          {/* Receipt Card */}
+          <ReceiptImage
+            imageDataUrl={imageDataUrl}
+            name={name}
+            isRendering={isRendering}
+            imgLoader="/sphere.svg"
+            altLoader="Loading receipt..."
+            text={displayText}
+          />
 
-          <div className={cardStyles.notaCard}>
-            {imageDataUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={imageDataUrl}
-                alt="MyReceipt"
-                className={cardStyles.notaImage}
-              />
-            ) : isRendering ? (
-              <div className={cardStyles.notaLoader}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/sphere.svg"
-                  alt="Loading receipt…"
-                  className={cardStyles.notaLoaderImage}
-                />
-              </div>
-            ) : (
-              <p className={cardStyles.notaText}>{text}</p>
-            )}
-          </div>
-
-          {copyStatus && (
-            <p
-              className={editorStyles.appendHint}
-              style={{ marginTop: "0.5rem" }}
-            >
-              {copyStatus}
-            </p>
+          {/* Receipt CTA */}
+          {hasText ? (
+            <ReceiptDownload
+              saveLabel="Use The Buttons Below"
+              statusMessage={statusMessage}
+              imageDataUrl={imageDataUrl}
+              onCopy={handleCopyImage}
+              copyAria="Copy image to clipboard."
+              copyText="Copy Image"
+              onSave={handleDownloadImage}
+              saveAria="Download and save image."
+              saveText="Save Image"
+            />
+          ) : (
+            <ReceiptDownload
+              saveLabel="The Home Button"
+              imageDataUrl={null}
+              onGoHome={() => router.push("/")}
+              goAria="Go to the Home page."
+              goText="Go To Home Page"
+            />
           )}
-
-          <button
-            type="button"
-            className={editorStyles.secondaryButton}
-            onClick={handleCopyImage}
-            disabled={!imageDataUrl}
-          >
-            Copy image to clipboard
-          </button>
-
-          <button
-            type="button"
-            className={editorStyles.secondaryButton}
-            onClick={handleDownloadImage}
-            disabled={!imageDataUrl}
-          >
-            Save image
-          </button>
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <Footer
+        onGet={() => router.push("/")}
+        getAria="Get another receipt."
+        getLabel="Get"
+        onTips={handleTips}
+        tipsAria="Send tips to Prof. NOTA."
+        tipsLabel="Tips"
+        onPin={handleSaveMiniApp}
+        pinAria="Pin MyReceipt mini app."
+        pinLabel="Pin"
+        onShare={handleShare}
+        shareAria="Share receipt of today."
+        shareLabel="Share"
+        sharingLabel="..."
+        isSharing={isSharing}
+      />
     </div>
   );
 }

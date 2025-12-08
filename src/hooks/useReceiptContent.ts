@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-
 import { renderReceiptImage } from "../lib/receiptCanvas";
 import { generateReceipt, getMaxReceiptLength } from "../lib/receiptTemplates";
 
@@ -17,9 +16,12 @@ type UseReceiptContentResult = {
   setEditorText: (value: string) => void;
   handleAnother: () => void;
   handleApplyEdits: () => void;
+  activeBody: string;
 };
 
-export function useReceiptContent(displayName: string): UseReceiptContentResult {
+export function useReceiptContent(
+  displayName: string
+): UseReceiptContentResult {
   const [currentNota, setCurrentNota] = useState<string>("");
   const [nameUsed, setNameUsed] = useState<string>(displayName);
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
@@ -98,6 +100,7 @@ export function useReceiptContent(displayName: string): UseReceiptContentResult 
   };
 
   const displayText = renderText || currentNota;
+  const activeBody = displayText;
 
   return {
     currentNota,
@@ -111,5 +114,6 @@ export function useReceiptContent(displayName: string): UseReceiptContentResult 
     setEditorText,
     handleAnother,
     handleApplyEdits,
+    activeBody,
   };
 }

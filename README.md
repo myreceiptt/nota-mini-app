@@ -84,7 +84,7 @@ All routes use the App Router.
 - **`app/open/page.tsx` — Open / Viewer**
 
   - Uses an inner client component with `useSearchParams()` to read `?text=...&name=...`.
-  - Uses `useOpenReceipt(text, name)` to:
+  - Uses `useReceiptOpen(text, name)` to:
     - Render the receipt image from text via the canvas helper.
     - Handle copy + download actions.
   - Reuses the same visual language as the home page.
@@ -203,7 +203,7 @@ Hooks centralize all behavioural logic.
     - Share text builders from `app/lib/shareText`.
     - MiniKit APIs (`useComposeCast`, `useAddFrame`, etc.).
 
-- **`useOpenReceipt.ts`**
+- **`useReceiptOpen.ts`**
 
   - For the `/open` route.
   - Given `text` + `name`:
@@ -296,7 +296,7 @@ Styling is intentionally simple and split into:
 
 - **Component-scoped CSS Modules**
   - `app/components/ReceiptCard.module.css`
-  - `app/components/ReceiptEditor.module.css`
+  - `app/components/ReceiptCTA.module.css`
   - `app/components/ActionsBar.module.css`
   - `app/success/components/SuccessHero.module.css`
   - `app/success/components/SuccessActions.module.css`
@@ -341,14 +341,14 @@ app/
     ReceiptCard.tsx
     ReceiptCard.module.css
     ReceiptEditor.tsx
-    ReceiptEditor.module.css
+    ReceiptCTA.module.css
     ActionsBar.tsx
     ActionsBar.module.css
 
   hooks/
     useReceiptContent.ts
     useMiniAppActions.ts
-    useOpenReceipt.ts
+    useReceiptOpen.ts
     useSuccessActions.ts
 
   lib/
@@ -394,7 +394,7 @@ public/
 4. `/open`:
 
    - Reads text + name from query string.
-   - Uses `useOpenReceipt` to render, copy, and download the receipt image.
+   - Uses `useReceiptOpen` to render, copy, and download the receipt image.
 
 5. `/success`:
 
@@ -637,7 +637,7 @@ This repository is intended as a living playground for NOTA-themed experiments b
 
   - Mint or “stamp” a MyReceipt as an onchain artefact
   - Proof-of-presence / proof-of-reflection flows
-  - Tiny utilities around **$myreceipt** or other Prof. NOTA narratives (purely experimental, non-financial)
+  - Tiny utilities around **$MyReceipt** or other Prof. NOTA narratives (purely experimental, non-financial)
 
 Any actual use, remix, or redistribution of this codebase must follow the terms described in the `LICENSE` file. If you are interested in collaborations or specific permissions, please refer to the contact information in `LICENSE`.
 

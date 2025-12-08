@@ -5,15 +5,19 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  text-align: left;
+  text-align: center;
 }
 
 .appendLabel {
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: #222222;
+}
+
+.appendHint {
+  font-size: 0.75rem;
+  color: #777777;
 }
 
 .appendTextarea {
@@ -32,11 +36,6 @@
 
 .appendTextarea::placeholder {
   color: #a0a0a0;
-}
-
-.appendHint {
-  font-size: 0.75rem;
-  color: #777777;
 }
 
 .appendActions {

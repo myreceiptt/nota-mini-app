@@ -1,8 +1,8 @@
 {
   "name": "nota-mini-app",
-  "version": "1.4.11",
+  "version": "2.4.74",
   "private": true,
-  "description": "NOTA Mini App is an experimental Mini App for the Base app and Farcaster, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.",
+  "description": "NOTA Mini App is an experimental Mini App for the Base app and Farcaster, named as MyReceipt, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.",
   "author": "Prof. NOTA",
   "license": "UNLICENSED - SEE LICENSE IN LICENSE",
   "receipt": {

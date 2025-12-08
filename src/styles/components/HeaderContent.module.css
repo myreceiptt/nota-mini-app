@@ -1,0 +1,12 @@
+.subtitle {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  color: #474747;
+  text-align: center;
+}
+
+.subtitle strong {
+  font-weight: 600;
+  color: #111111;
+}

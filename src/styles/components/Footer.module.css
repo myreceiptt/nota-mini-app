@@ -1,3 +1,18 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #000000;
+  padding: 0.5rem 1rem;
+  z-index: 20;
+}
+
+.footerInner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
 .actions {
   margin: 0.75rem auto 0;
   max-width: 360px;
@@ -52,15 +67,6 @@
   cursor: default;
 }
 
-.primaryAction {
-  background: #111111;
-  color: #ffffff;
-}
-
-.primaryAction:hover:not(:disabled) {
-  background: #333333;
-}
-
 .iconGlyph {
   width: 16px;
   height: 16px;
@@ -72,6 +78,15 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 600;
+}
+
+.primaryAction {
+  background: #111111;
+  color: #ffffff;
+}
+
+.primaryAction:hover:not(:disabled) {
+  background: #333333;
 }
 
 @media (max-width: 480px) {

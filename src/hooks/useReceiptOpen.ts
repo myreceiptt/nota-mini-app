@@ -1,24 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { renderReceiptImage } from "../lib/receiptCanvas";
 
-type UseOpenReceiptResult = {
+type ReceiptOpenMessages = {
+  copyUnsupported: string;
+  copySuccess: string;
+  copyFailed: string;
+  saveUnsupported: string;
+  saveSuccess: string;
+  saveFailed: string;
+};
+
+type UseReceiptOpenOptions = {
+  onStatusChange?: (msg: string) => void;
+  messages: ReceiptOpenMessages;
+};
+
+type UseReceiptOpenResult = {
   imageDataUrl: string | null;
   isRendering: boolean;
-  copyStatus: string;
   handleCopyImage: () => Promise<void>;
   handleDownloadImage: () => void;
 };
 
-export function useOpenReceipt(
+export function useReceiptOpen(
   text: string,
-  name: string
-): UseOpenReceiptResult {
+  name: string,
+  options: UseReceiptOpenOptions
+): UseReceiptOpenResult {
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState<boolean>(true);
-  const [copyStatus, setCopyStatus] = useState<string>("");
+
+  const { onStatusChange, messages } = options;
 
   useEffect(() => {
     let cancelled = false;
@@ -50,7 +64,10 @@ export function useOpenReceipt(
 
     try {
       if (typeof navigator === "undefined") {
-        setCopyStatus("Copy image is not supported in this browser.");
+        console.log(
+          "[useReceiptOpen] navigator is undefined, copy unsupported"
+        );
+        onStatusChange?.(messages.copyUnsupported);
         return;
       }
 
@@ -59,7 +76,10 @@ export function useOpenReceipt(
         typeof ClipboardItem !== "undefined" ? ClipboardItem : undefined;
 
       if (!clipboard || !ClipboardItemCtor) {
-        setCopyStatus("Copy image is not supported in this browser.");
+        console.log(
+          "[useReceiptOpen] clipboard or ClipboardItem is unavailable, copy unsupported"
+        );
+        onStatusChange?.(messages.copyUnsupported);
         return;
       }
 
@@ -68,29 +88,40 @@ export function useOpenReceipt(
       const item = new ClipboardItemCtor({ [blob.type]: blob });
       await clipboard.write([item]);
 
-      setCopyStatus("Image copied to clipboard.");
+      onStatusChange?.(messages.copySuccess);
     } catch (error) {
-      console.error("Failed to copy image:", error);
-      setCopyStatus("Failed to copy image.");
+      console.error("[useReceiptOpen] Failed to copy image:", error);
+      onStatusChange?.(messages.copyFailed);
     }
   };
 
   const handleDownloadImage = () => {
     if (!imageDataUrl) return;
-    if (typeof document === "undefined") return;
 
-    const link = document.createElement("a");
-    link.href = imageDataUrl;
-    link.download = "myreceipt.png";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (typeof document === "undefined") {
+      console.log("[useReceiptOpen] document is undefined, save unsupported");
+      onStatusChange?.(messages.saveUnsupported);
+      return;
+    }
+
+    try {
+      const link = document.createElement("a");
+      link.href = imageDataUrl;
+      link.download = "myreceipt.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      onStatusChange?.(messages.saveSuccess);
+    } catch (error) {
+      console.error("[useReceiptOpen] Failed to save image:", error);
+      onStatusChange?.(messages.saveFailed);
+    }
   };
 
   return {
     imageDataUrl,
     isRendering,
-    copyStatus,
     handleCopyImage,
     handleDownloadImage,
   };

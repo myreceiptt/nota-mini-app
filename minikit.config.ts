@@ -10,7 +10,6 @@ const ROOT_URL =
  * @see {@link https://miniapps.farcaster.xyz/docs/guides/publishing}
  */
 export const minikitConfig = {
-  // Sudah di-generate khusus untuk domain mini.endhonesa.com
   accountAssociation: {
     header:
       "eyJmaWQiOjUxNzc5OCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDdlOUQzNUI5ZEI1REVhNjFGODVGNEYxNGY0Qzk3MmI3N0Q3NWE2NzQifQ",
@@ -23,7 +22,6 @@ export const minikitConfig = {
     ownerAddress: "0x35b68340C61F26147b7B22f5Ab931892BD9358B3",
   },
 
-  // Bagian ini akan diubah jadi manifest "frame" oleh withValidManifest()
   miniapp: {
     version: "1",
     name: "MyReceipt",
@@ -50,7 +48,7 @@ export const minikitConfig = {
     webhookUrl: `${ROOT_URL}/api/webhook`,
 
     primaryCategory: "education",
-    tags: ["receipt", "nota", "reflection", "vibes", "satuempatsebelas"],
+    tags: ["receipt", "nota", "reflection", "vibes", "duaempattujuhempat"],
 
     tagline: "Your onchain receipt of today.",
     ogTitle: "MyReceipt",

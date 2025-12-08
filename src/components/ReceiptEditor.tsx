@@ -1,45 +1,59 @@
 "use client";
 
-import styles from "./ReceiptEditor.module.css";
+import styles from "@/styles/components/ReceiptCTA.module.css";
 
 type ReceiptEditorProps = {
+  editorLabel: string;
+  editorHint: string;
+  placeholderText: string;
+  textLimit: number;
   editorText: string;
   onChange: (value: string) => void;
-  textLimit: number;
-  hasChanges: boolean;
   onApply: () => void;
+  hasChanges: boolean;
+  updateLabel: string;
+  updateText: string;
+  mintLabel: string;
+  mintText: string;
   onOpen: () => void;
   displayText: string;
+  openLabel: string;
+  openText: string;
 };
 
 export function ReceiptEditor({
+  editorLabel,
+  editorHint,
+  placeholderText,
+  textLimit,
   editorText,
   onChange,
-  textLimit,
-  hasChanges,
   onApply,
+  hasChanges,
+  updateLabel,
+  updateText,
+  mintLabel,
+  mintText,
   onOpen,
   displayText,
+  openLabel,
+  openText,
 }: ReceiptEditorProps) {
   return (
     <section className={styles.appendSection}>
       <label className={styles.appendLabel} htmlFor="user-append">
-        Add your own line to this receipt
+        {editorLabel}
       </label>
+      <p className={styles.appendHint}>{editorHint}</p>
 
       <textarea
         id="user-append"
         className={styles.appendTextarea}
-        placeholder="Type 1–2 lines that feel true for you today…"
+        placeholder={placeholderText}
         maxLength={textLimit}
         value={editorText}
         onChange={(e) => onChange(e.target.value)}
       />
-
-      <p className={styles.appendHint}>
-        Start from this version, edit it, or add 1–2 more lines — then apply it
-        to the card.
-      </p>
 
       <div className={styles.appendActions}>
         <button
@@ -47,18 +61,18 @@ export function ReceiptEditor({
           className={styles.secondaryButton}
           onClick={onApply}
           disabled={!editorText.trim() || !hasChanges}
-          aria-label="Apply your edits to the receipt card."
+          aria-label={updateLabel}
         >
-          Update receipt
+          {updateText}
         </button>
 
         <button
           type="button"
           className={styles.secondaryButton}
           disabled
-          aria-label="Mint receipt (coming soon)."
+          aria-label={mintLabel}
         >
-          Mint receipt (soon)
+          {mintText}
         </button>
 
         <button
@@ -66,9 +80,9 @@ export function ReceiptEditor({
           className={styles.secondaryButton}
           onClick={onOpen}
           disabled={!displayText}
-          aria-label="Open this receipt as a standalone image."
+          aria-label={openLabel}
         >
-          Open as image
+          {openText}
         </button>
       </div>
     </section>
