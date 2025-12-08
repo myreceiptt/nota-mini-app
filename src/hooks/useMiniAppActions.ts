@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { sdk } from "@farcaster/miniapp-sdk";
 import {
   useAddFrame,
@@ -36,6 +37,7 @@ export function useMiniAppActions({
   const { composeCastAsync } = useComposeCast();
   const addFrame = useAddFrame();
   const openUrl = useOpenUrl();
+  const router = useRouter();
 
   const [isSharing, setIsSharing] = useState(false);
 
@@ -90,12 +92,11 @@ export function useMiniAppActions({
   const handleOpenStandalone = () => {
     if (!body.trim()) return;
 
-    const origin = typeof window !== "undefined" ? window.location.origin : "";
-    const url = `${origin}/open?text=${encodeURIComponent(
+    const url = `/open?text=${encodeURIComponent(
       body
     )}&name=${encodeURIComponent(displayName || "OiOi")}`;
 
-    openUrl(url);
+    router.push(url);
   };
 
   // NEW: Tips → coba buka swapToken $ENDHONESA; kalau gagal, fallback ke URL tips lama
