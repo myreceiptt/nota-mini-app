@@ -26,6 +26,52 @@ This repository is intentionally small and opinionated so that it can serve as a
 
 ---
 
+# Maintenance by Prof. NOTA Evergreen Standard
+
+This repo is intended to stay evergreen while remaining production-safe.
+
+### Runtime
+
+- Node: **24.x** (see `mini/.nvmrc` and `mini/package.json#engines`)
+- Package manager:
+  - **NPM** (lockfile: `package-lock.json`)
+  - ~~Yarn (lockfile: `yarn.lock`)~~
+  - ~~PNPM (lockfile: `pnpm-lock.yaml`)~~
+- Deploy target:
+  - **Vercel**
+  - ~~Netlify~~
+  - ~~Self-hosted / Docker~~
+  - ~~Other platform (document explicitly)~~
+
+### Monthly Safe Updates (recommended)
+
+1. Check what’s outdated:
+   - `npm outdated`
+2. Upgrade safe (patch/minor) versions:
+   - `npm update`
+   - or upgrade specific packages shown as non-major
+3. Verify:
+   - `npm audit --audit-level moderate`
+   - `npm run build`
+4. Deploy:
+   - **Vercel auto-deploy from `main`**
+   - ~~manual deploy according to platform workflow~~
+
+### Major Updates (quarterly / scheduled)
+
+Major upgrades (framework, runtime, or core tooling) must be done one at a time, with a dedicated PR and full testing.
+
+Examples:
+
+- Node major version
+- Next.js / React major version
+- Package manager major version
+
+Deferred this cycle:
+- Next.js 16.x (lint workflow changes + ESLint config errors)
+- wagmi 3.x (peer mismatch with `@coinbase/onchainkit` ^2.x requirement)
+- TypeScript 5.9.x (peer requirement from `@farcaster/quick-auth`)
+
 ## Tech Stack
 
 - **Next.js 15** (App Router, `app/` directory) with TypeScript

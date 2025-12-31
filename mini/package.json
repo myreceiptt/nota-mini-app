@@ -32,27 +32,27 @@
   "dependencies": {
     "@coinbase/onchainkit": "1.1.2",
     "@farcaster/miniapp-sdk": "0.2.1",
-    "@tanstack/react-query": "5.90.12",
+    "@tanstack/react-query": "^5.90.16",
     "@vercel/analytics": "1.6.1",
-    "lucide-react": "0.556.0",
-    "next": "15.5.7",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
-    "viem": "2.41.2",
-    "wagmi": "2.19.5"
+    "lucide-react": "^0.562.0",
+    "next": "^15.5.9",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "viem": "^2.43.4",
+    "wagmi": "^2.19.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
-    "@farcaster/quick-auth": "0.0.7",
-    "@next/eslint-plugin-next": "15.5.7",
-    "@types/node": "20.19.25",
+    "@farcaster/quick-auth": "^0.0.8",
+    "@next/eslint-plugin-next": "^15.5.9",
+    "@types/node": "^24.10.4",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
-    "eslint": "9.39.1",
-    "eslint-config-next": "15.5.7",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^15.5.9",
     "typescript": "5.8.3"
   },
   "engines": {
-    "node": ">=22.11.0"
+    "node": ">=24.0.0"
   }
 }
