@@ -45,3 +45,12 @@ backend/artifacts/
 backend/cache/
 backend/typechain/
 backend/typechain-types/
+
+# backend receipt automation
+backend/receipt/.privatekey.local
+backend/receipt/content.json
+backend/receipt/.progress.json
+backend/receipt/.stamp.pid
+
+# allow env examples
+!**/.env.example
