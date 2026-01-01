@@ -1,10 +1,10 @@
-# MyReceipt Mini App (NOTA Mini App)
+# $MyReceipt of Life - $MyReceipt Mini App
 
-**MyReceipt Mini App** (a.k.a. **NOTA Mini App**) is an experimental Mini App for the **Base app** and **Farcaster**, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.
+**$MyReceipt of Life - $MyReceipt Mini App** starting from an experimental Mini App for the **Base app** and **Farcaster**, and an experimentar Web App on the **Stacks blockchain**, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.
 
-It takes the NOTA concept and turns it into:
+It takes the receipt concept and turns it into:
 
-> **“Your onchain receipt of today.”**
+> **“Your onchain receipt of life.”**
 
 The current default experience is a simple **“NOTA fortune”** flow:
 
@@ -23,71 +23,6 @@ This repository is intentionally small and opinionated so that it can serve as a
 - Personalised NOTA content,
 - Per-user receipt history,
 - Eventual onchain integrations on Base (minting, stamping, proofs).
-
----
-
-# Maintenance by Prof. NOTA Evergreen Standard
-
-This repo is intended to stay evergreen while remaining production-safe.
-
-### Runtime
-
-- Node: **24.x** (see `mini/.nvmrc` and `mini/package.json#engines`)
-- Package manager:
-  - **NPM** (lockfile: `package-lock.json`)
-  - ~~Yarn (lockfile: `yarn.lock`)~~
-  - ~~PNPM (lockfile: `pnpm-lock.yaml`)~~
-- Deploy target:
-  - **Vercel**
-  - ~~Netlify~~
-  - ~~Self-hosted / Docker~~
-  - ~~Other platform (document explicitly)~~
-
-### Monthly Safe Updates (recommended)
-
-1. Check what’s outdated:
-   - `npm outdated`
-2. Upgrade safe (patch/minor) versions:
-   - `npm update`
-   - or upgrade specific packages shown as non-major
-3. Verify:
-   - `npm audit --audit-level moderate`
-   - `npm run build`
-4. Deploy:
-   - **Vercel auto-deploy from `main`**
-   - ~~manual deploy according to platform workflow~~
-
-### Major Updates (quarterly / scheduled)
-
-Major upgrades (framework, runtime, or core tooling) must be done one at a time, with a dedicated PR and full testing.
-
-Examples:
-
-- Node major version
-- Next.js / React major version
-- Package manager major version
-
-Deferred this cycle:
-- Next.js 16.x (lint workflow changes + ESLint config errors)
-- wagmi 3.x (peer mismatch with `@coinbase/onchainkit` ^2.x requirement)
-- TypeScript 5.9.x (peer requirement from `@farcaster/quick-auth`)
-
-## Tech Stack
-
-- **Next.js 15** (App Router, `app/` directory) with TypeScript
-- **OnchainKit / MiniKit** from Coinbase:
-  - `OnchainKitProvider` as the root provider (Base chain)
-  - `SafeArea`, `useMiniKit`, `useComposeCast`, `useAddFrame` for Mini App integration
-- **Farcaster Mini App manifest**:
-  - `minikit.config.ts` + `app/.well-known/farcaster.json/route.ts`
-- **Farcaster Mini App SDK / MiniKit runtime** for running in Farcaster clients & Base app
-- **`next/og`**:
-  - `/api/receipt` for generating image-based receipts
-- **`@farcaster/quick-auth`**:
-  - `/api/auth` to verify Farcaster JWTs when needed
-- **Styling**:
-  - CSS Modules + global styles (`app/globals.css`)
-  - Component-scoped CSS modules co-located with key components
 
 ---
 
@@ -701,5 +636,73 @@ License, permitted uses, and restrictions are defined in the `LICENSE` file at t
 
 - [https://base.org](https://base.org)
 - [https://docs.base.org](https://docs.base.org)
+
+---
+
+## Maintenance by Prof. NOTA Evergreen Standard
+
+This repo is intended to stay evergreen while remaining production-safe.
+
+### Runtime
+
+- Node: **24.x** (see `mini/.nvmrc` and `mini/package.json#engines`)
+- Package manager:
+  - **NPM** (lockfile: `package-lock.json`)
+  - ~~Yarn (lockfile: `yarn.lock`)~~
+  - ~~PNPM (lockfile: `pnpm-lock.yaml`)~~
+- Deploy target:
+  - **Vercel**
+  - ~~Netlify~~
+  - ~~Self-hosted / Docker~~
+  - ~~Other platform (document explicitly)~~
+
+### Monthly Safe Updates (recommended)
+
+1. Check what’s outdated:
+   - `npm outdated`
+2. Upgrade safe (patch/minor) versions:
+   - `npm update`
+   - or upgrade specific packages shown as non-major
+3. Verify:
+   - `npm audit --audit-level moderate`
+   - `npm run build`
+4. Deploy:
+   - **Vercel auto-deploy from `main`**
+   - ~~manual deploy according to platform workflow~~
+
+### Major Updates (quarterly / scheduled)
+
+Major upgrades (framework, runtime, or core tooling) must be done one at a time, with a dedicated PR and full testing.
+
+Examples:
+
+- Node major version
+- Next.js / React major version
+- Package manager major version
+
+Deferred this cycle:
+
+- Next.js 16.x (lint workflow changes + ESLint config errors)
+- wagmi 3.x (peer mismatch with `@coinbase/onchainkit` ^2.x requirement)
+- TypeScript 5.9.x (peer requirement from `@farcaster/quick-auth`)
+
+## Tech Stack
+
+- **Next.js 15** (App Router, `app/` directory) with TypeScript
+- **OnchainKit / MiniKit** from Coinbase:
+  - `OnchainKitProvider` as the root provider (Base chain)
+  - `SafeArea`, `useMiniKit`, `useComposeCast`, `useAddFrame` for Mini App integration
+- **Farcaster Mini App manifest**:
+  - `minikit.config.ts` + `app/.well-known/farcaster.json/route.ts`
+- **Farcaster Mini App SDK / MiniKit runtime** for running in Farcaster clients & Base app
+- **`next/og`**:
+  - `/api/receipt` for generating image-based receipts
+- **`@farcaster/quick-auth`**:
+  - `/api/auth` to verify Farcaster JWTs when needed
+- **Styling**:
+  - CSS Modules + global styles (`app/globals.css`)
+  - Component-scoped CSS modules co-located with key components
+
+---
 
 ---

@@ -1,11 +1,20 @@
-# NOTA Monorepo
+# $MyReceipt of Life
 
 This repository is a monorepo with:
 
-- `mini/` — the Mini App (Base app / Farcaster)
 - `backend/` — smart contracts, Hardhat scripts, and deterministic deploy tooling
+- `mini/` — the Mini App (Base app / Farcaster)
+- `web/` - soon
 
 ## Quick Start
+
+### Web App
+
+```sh
+cd web
+npm install
+npm run dev
+```
 
 ### Mini App
 
