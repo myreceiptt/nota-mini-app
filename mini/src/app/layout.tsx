@@ -7,6 +7,7 @@ import { RootProvider } from "@/components/RootProvider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import "@/styles/globals.css";
+import "@coinbase/onchainkit/styles.css";
 
 // generateMetadata
 // -----------------
@@ -56,9 +57,11 @@ export default function RootLayout({
   return (
     <RootProvider>
       <html lang="en">
-        <body className={`${inter.variable} ${sourceCodePro.variable}`}>
+        <body
+          className={`${inter.variable} ${sourceCodePro.variable} min-h-screen bg-white text-black`}
+        >
           <SafeArea>
-            <div className="flex min-h-screen flex-col bg-white text-black">
+            <div className="flex min-h-screen flex-col">
               <Navbar />
               <main className="flex-1 bg-white">
                 <div className="mx-auto w-full max-w-5xl px-4 py-10">
