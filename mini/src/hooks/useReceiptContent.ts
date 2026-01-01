@@ -41,6 +41,7 @@ export function useReceiptContent(
   );
 
   // Generate receipt pertama kali & setiap nama berubah
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!currentNota || nameUsed !== displayName) {
       const next = generateReceipt(displayName);
@@ -56,6 +57,7 @@ export function useReceiptContent(
       setIsRendering(true);
     }
   }, [displayName, currentNota, nameUsed]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Render PNG berbasis renderText + displayName
   useEffect(() => {

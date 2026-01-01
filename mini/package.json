@@ -1,8 +1,8 @@
 {
   "name": "nota-mini-app",
-  "version": "2.4.74",
+  "version": "2.7.47",
   "private": true,
-  "description": "NOTA Mini App is an experimental Mini App for the Base app and Farcaster, named as MyReceipt, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.",
+  "description": "$MyReceipt of Life - $MyReceipt Mini App starting from an experimental Mini App for the Base app and Farcaster, and an experimental Web App on the Stacks blockchain, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.",
   "author": "Prof. NOTA",
   "license": "UNLICENSED - SEE LICENSE IN LICENSE",
   "receipt": {
@@ -25,9 +25,9 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@coinbase/onchainkit": "1.1.2",
@@ -35,7 +35,7 @@
     "@tanstack/react-query": "^5.90.16",
     "@vercel/analytics": "1.6.1",
     "lucide-react": "^0.562.0",
-    "next": "^15.5.9",
+    "next": "^16.1.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "viem": "^2.43.4",
@@ -44,17 +44,17 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
     "@farcaster/quick-auth": "^0.0.8",
-    "@next/eslint-plugin-next": "^15.5.9",
+    "@next/eslint-plugin-next": "^16.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^24.10.4",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "autoprefixer": "^10.4.23",
     "eslint": "^9.39.2",
-    "eslint-config-next": "^15.5.9",
+    "eslint-config-next": "^16.1.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
-    "typescript": "5.8.3"
+    "typescript": "^5.8.3"
   },
   "engines": {
     "node": ">=24.0.0"

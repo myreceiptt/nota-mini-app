@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Source_Code_Pro } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { SafeArea } from "@coinbase/onchainkit/minikit";
 import { minikitConfig } from "../../minikit.config";
-import { RootProvider } from "@/components/RootProvider";
-import { Navbar } from "@/components/navbar";
+import { SafeArea } from "@coinbase/onchainkit/minikit";
 import { Footer } from "@/components/footer";
-import "@/styles/globals.css";
+import { Navbar } from "@/components/navbar";
+import { RootProvider } from "@/components/RootProvider";
 import "@coinbase/onchainkit/styles.css";
+import "./globals.css";
 
 // generateMetadata
 // -----------------
@@ -33,16 +32,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const sourceCodePro = Source_Code_Pro({
-  variable: "--font-source-code-pro",
-  subsets: ["latin"],
-});
-
 // RootLayout
 // ----------
 // - Wraps everything with OnchainKit (RootProvider).
@@ -55,11 +44,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <RootProvider>
-      <html lang="en">
-        <body
-          className={`${inter.variable} ${sourceCodePro.variable} min-h-screen bg-white text-black`}
-        >
+    <html lang="en">
+      <body className="min-h-screen bg-white text-black">
+        <RootProvider>
           <SafeArea>
             <div className="flex min-h-screen flex-col">
               <Navbar />
@@ -71,9 +58,9 @@ export default function RootLayout({
               <Footer />
             </div>
           </SafeArea>
-          <Analytics />
-        </body>
-      </html>
-    </RootProvider>
+        </RootProvider>
+        <Analytics />
+      </body>
+    </html>
   );
 }

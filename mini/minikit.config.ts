@@ -24,10 +24,10 @@ export const minikitConfig = {
 
   miniapp: {
     version: "1",
-    name: "MyReceipt",
-    subtitle: "A small receipt to hold today.", // 30 chars ✅
+    name: "$MyReceipt",
+    subtitle: "On-chain receipt of life.", // 30 chars ✅
     description:
-      "MyReceipt is an experimental Mini App by Prof. NOTA that surfaces short reflective lines and small onchain receipts inside Base App and Farcaster.",
+      "$MyReceipt of Life - $MyReceipt Mini App starting from an experimental Mini App for the Base app and Farcaster, and an experimental Web App on the Stacks blockchain, built by Prof. NOTA as a sandbox for playful and reflective onchain experiences.",
 
     screenshotUrls: [
       `${ROOT_URL}/screenshot1.png`,
@@ -50,10 +50,10 @@ export const minikitConfig = {
     primaryCategory: "education",
     tags: ["receipt", "nota", "reflection", "vibes", "duaempattujuhempat"],
 
-    tagline: "Your onchain receipt of today.",
-    ogTitle: "MyReceipt",
+    tagline: "Your onchain receipt of life.",
+    ogTitle: "$MyReceipt",
     ogDescription:
-      "Open MyReceipt on Base or Farcaster and pull a short line as your onchain receipt of the day.", // 100 chars ✅
+      "Open $MyReceipt, write and stamp, also mint an NFT for your on-chain receipt of life.", // 100 chars ✅
     ogImageUrl: `${ROOT_URL}/og.png`,
     noindex: false,
   },
