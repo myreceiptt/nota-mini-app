@@ -20,7 +20,7 @@ async function main() {
   const mintFee = BigInt(requireEnv("NFT_MINT_FEE_WEI"));
   const royaltyBps = Number(process.env.NFT_ROYALTY_BPS ?? "500");
 
-  const receiptFactory = await ethers.getContractFactory("ReceiptStamp");
+  const receiptFactory = await ethers.getContractFactory("MyReceiptStamp");
   const receipt = await receiptFactory.deploy(
     deployer.address,
     treasury,

@@ -38,6 +38,13 @@ const deployIfNeeded = async (initCode: string) => {
   if (code && code !== "0x") {
     return expected;
   }
+  const factoryCode = await ethers.provider.getCode(factoryAddress);
+  if (!factoryCode || factoryCode === "0x") {
+    throw new Error(
+      `CREATE2 factory not deployed at ${factoryAddress} on ${network.name}. ` +
+        "Deploy a factory or use non-deterministic deploy for this network."
+    );
+  }
   const factory = new ethers.Contract(
     factoryAddress,
     ["function deploy(bytes _initCode, bytes32 _salt) external returns (address)"],
@@ -46,6 +53,12 @@ const deployIfNeeded = async (initCode: string) => {
   const saltBytes = ethers.id(salt);
   const tx = await factory.deploy(initCode, saltBytes);
   await tx.wait();
+  const deployedCode = await ethers.provider.getCode(expected);
+  if (!deployedCode || deployedCode === "0x") {
+    throw new Error(
+      `CREATE2 deploy failed for ${expected} on ${network.name}.`
+    );
+  }
   return expected;
 };
 
@@ -64,13 +77,19 @@ async function main() {
   const mintFee = BigInt(requireEnv("NFT_MINT_FEE_WEI"));
   const royaltyBps = Number(process.env.NFT_ROYALTY_BPS ?? "500");
 
-  const receiptInit = await getDeployData("ReceiptStamp", [
+  const receiptInit = await getDeployData("MyReceiptStamp", [
     deployer.address,
     treasury,
     stampFee,
     royaltyFee,
   ]);
   const receiptAddress = await deployIfNeeded(receiptInit);
+  const receiptCode = await ethers.provider.getCode(receiptAddress);
+  if (!receiptCode || receiptCode === "0x") {
+    throw new Error(
+      `Receipt contract not deployed at ${receiptAddress} on ${network.name}.`
+    );
+  }
 
   const nftInit = await getDeployData("ReceiptNFT", [
     deployer.address,
@@ -80,8 +99,14 @@ async function main() {
     royaltyBps,
   ]);
   const nftAddress = await deployIfNeeded(nftInit);
+  const nftCode = await ethers.provider.getCode(nftAddress);
+  if (!nftCode || nftCode === "0x") {
+    throw new Error(
+      `NFT contract not deployed at ${nftAddress} on ${network.name}.`
+    );
+  }
 
-  const receipt = await ethers.getContractAt("ReceiptStamp", receiptAddress);
+  const receipt = await ethers.getContractAt("MyReceiptStamp", receiptAddress);
   const currentNft = await receipt.nftContract();
   if (currentNft.toLowerCase() !== nftAddress.toLowerCase()) {
     const tx = await receipt.setNftContract(nftAddress);

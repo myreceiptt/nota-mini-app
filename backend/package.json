@@ -11,7 +11,11 @@
     "deploy:all": "hardhat run scripts/deploy-all.ts --network baseSepolia",
     "deploy:deterministic": "hardhat run scripts/deploy-deterministic.ts --network baseSepolia",
     "verify:receipt": "hardhat verify --network baseSepolia",
-    "verify:nft": "hardhat verify --network baseSepolia"
+    "verify:nft": "hardhat verify --network baseSepolia",
+    "manual:stamp": "hardhat run scripts/manual-stamp.ts --network baseSepolia",
+    "manual:transfer": "hardhat run scripts/manual-transfer.ts --network baseSepolia",
+    "manual:mint": "hardhat run scripts/manual-mint.ts --network baseSepolia",
+    "read:receipt": "hardhat run scripts/read-receipt.ts --network baseSepolia"
   },
   "keywords": [],
   "author": "",

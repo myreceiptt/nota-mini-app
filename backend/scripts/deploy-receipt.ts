@@ -18,7 +18,7 @@ async function main() {
   const stampFee = BigInt(requireEnv("STAMP_FEE_WEI"));
   const royaltyFee = BigInt(requireEnv("ROYALTY_FEE_WEI"));
 
-  const receiptFactory = await ethers.getContractFactory("ReceiptStamp");
+  const receiptFactory = await ethers.getContractFactory("MyReceiptStamp");
   const receipt = await receiptFactory.deploy(
     deployer.address,
     treasury,
