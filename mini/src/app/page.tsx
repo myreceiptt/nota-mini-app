@@ -1,131 +1,221 @@
 "use client";
 
-import { useEffect } from "react";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
-import { NavBar } from "@/components/NavBar";
-import { HeaderTitle } from "@/components/HeaderTitle";
-import { HeaderContent } from "@/components/HeaderContent";
-import { ReceiptCard } from "@/components/ReceiptCard";
-import { ReceiptEditor } from "@/components/ReceiptEditor";
-import { Footer } from "@/components/Footer";
-import { useMiniAppUser } from "@/hooks/useMiniAppUser";
-import { useReceiptContent } from "@/hooks/useReceiptContent";
-import { useMiniAppActions } from "@/hooks/useMiniAppActions";
-import styles from "@/styles/pages/page.module.css";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useWallet } from "@/hooks/use-wallet";
+import { PageHeaderActions } from "@/components/page-header-actions";
+import { toggleButtonClass } from "@/lib/button-styles";
+import { LiveTab } from "@/components/tab/live";
+import { ListTab } from "@/components/tab/list";
+import { ReceiptModal } from "@/components/receipt-modal";
+import { loadReceiptFeed } from "@/lib/receipt-feed";
+import {
+  getReceipt,
+  getReceiptsRangeDesc,
+  getStats,
+  type Receipt,
+} from "@/lib/receipt-contract";
 
-export default function Home() {
-  const { isFrameReady, setFrameReady } = useMiniKit();
-  const { displayName, avatarUrl } = useMiniAppUser();
+export default function LiveHomePage() {
+  const { address } = useWallet();
+  const [activeTab, setActiveTab] = useState<"live" | "list">("live");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [feedItems, setFeedItems] = useState<
+    Array<{
+      txid: string;
+      label: string;
+      sender: string;
+      recipient?: string;
+      timestamp?: string;
+      receiptId?: number | null;
+    }>
+  >([]);
+  const [feedLoading, setFeedLoading] = useState(false);
+  const [feedError, setFeedError] = useState<string | null>(null);
+  const [feedPage, setFeedPage] = useState(1);
+  const [feedTotal, setFeedTotal] = useState(0);
 
-  const {
-    editorText,
-    textLimit,
-    hasChanges,
-    isRendering,
-    imageDataUrl,
-    setEditorText,
-    handleAnother,
-    handleApplyEdits,
-    activeBody,
-  } = useReceiptContent(displayName);
+  const [listItems, setListItems] = useState<Receipt[]>([]);
+  const [listLoading, setListLoading] = useState(false);
+  const [listError, setListError] = useState<string | null>(null);
+  const [listPage, setListPage] = useState(1);
+  const [listTotalPages, setListTotalPages] = useState(1);
 
-  const {
-    isSharing,
-    handleOpenStandalone,
-    handleTips,
-    handleSaveMiniApp,
-    handleShare,
-  } = useMiniAppActions({
-    body: activeBody,
-    displayName,
-  });
+  const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null);
 
-  // Mark Mini App ready
-  useEffect(() => {
-    if (!isFrameReady) {
-      setFrameReady();
+  const feedPageSize = 11;
+  const listPageSize = 10;
+
+  const totalFeedPages = useMemo(() => {
+    return Math.max(1, Math.ceil(feedTotal / feedPageSize));
+  }, [feedTotal, feedPageSize]);
+
+  const fetchFeed = useCallback(
+    async (page = 1) => {
+      setFeedLoading(true);
+      setFeedError(null);
+      try {
+        const { items, total } = await loadReceiptFeed({
+          page,
+          pageSize: feedPageSize,
+        });
+        setFeedItems(items);
+        setFeedTotal(total);
+      } catch (err) {
+        console.error(err);
+        setFeedError("Unable to load the feed. Please try again.");
+      } finally {
+        setFeedLoading(false);
+      }
+    },
+    [feedPageSize]
+  );
+
+  const fetchList = useCallback(
+    async (page = 1) => {
+      setListLoading(true);
+      setListError(null);
+      try {
+        const stats = await getStats();
+        const lastId = Number(stats[0]);
+        if (!lastId) {
+          setListItems([]);
+          setListTotalPages(1);
+          return;
+        }
+        const totalPages = Math.max(1, Math.ceil(lastId / listPageSize));
+        const startId = lastId - (page - 1) * listPageSize;
+        const receipts = await getReceiptsRangeDesc(
+          startId > 0 ? startId : 0,
+          listPageSize
+        );
+        setListItems(receipts);
+        setListTotalPages(totalPages);
+      } catch (err) {
+        console.error(err);
+        setListError("Unable to load receipt gallery. Please try again.");
+      } finally {
+        setListLoading(false);
+      }
+    },
+    [listPageSize]
+  );
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      if (activeTab === "live") {
+        await fetchFeed(feedPage);
+      } else {
+        await fetchList(listPage);
+      }
+    } finally {
+      setIsRefreshing(false);
     }
-  }, [isFrameReady, setFrameReady]);
+  }, [activeTab, fetchFeed, fetchList, feedPage, listPage]);
+
+  const handleSelectReceipt = useCallback(async (id: number) => {
+    try {
+      const receipt = await getReceipt(id);
+      setSelectedReceipt(receipt);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "live") {
+      fetchFeed(feedPage);
+    } else {
+      fetchList(listPage);
+    }
+  }, [activeTab, feedPage, listPage, fetchFeed, fetchList]);
 
   return (
-    <div className={styles.appRoot}>
-      {/* NavBar */}
-      <NavBar
-        titleLink="#"
-        titleLabel="Open $MyReceipt Swap Page"
-        title="$MyReceipt"
-        avatarLink="#"
-        avatarLabel="Open User Profile"
-        avatarUrl={avatarUrl}
-        displayName={displayName}
-        fallbackIcon="/icon.png"
-        altIcon="MyReceipt Icon"
-      />
-
-      {/* Main Content */}
-      <main className={styles.main}>
-        <div className={styles.shell}>
-          {/* Header */}
-          <HeaderTitle>Get Your Receipt</HeaderTitle>
-          <HeaderContent>
-            {
-              <>
-                Hi, <strong>{displayName}</strong>! Here&apos;s a small receipt
-                for today — a short line to nudge how you see your day onchain
-                and off.
-              </>
-            }
-          </HeaderContent>
-
-          {/* Receipt Card */}
-          <ReceiptCard
-            imageDataUrl={imageDataUrl}
-            displayName={displayName}
-            isRendering={isRendering}
-            imgLoader="/sphere.svg"
-            altLoader="Loading receipt..."
-            displayText={activeBody}
-          />
-
-          {/* Receipt CTA */}
-          <ReceiptEditor
-            editorLabel="Add Your Own Words to This Receipt"
-            editorHint="Start from this version, edit it, or remove it and add your 1-2 lines — then apply it to the card."
-            placeholderText="Type 1-2 lines that feel true for you today..."
-            textLimit={textLimit}
-            editorText={editorText}
-            onChange={setEditorText}
-            onApply={handleApplyEdits}
-            hasChanges={hasChanges}
-            updateLabel="Apply your edits to the receipt card."
-            updateText="Update Receipt"
-            mintLabel="Mint receipt (coming soon)."
-            mintText="Mint Receipt (soon)"
-            onOpen={handleOpenStandalone}
-            displayText={activeBody}
-            openLabel="Open this receipt as a standalone image."
-            openText="Open as Image"
+    <section className="space-y-6">
+      <header className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="space-y-1">
+            <p className="text-xs uppercase tracking-[0.25em] text-neutral-600">
+              Live · Base mainnet feed
+            </p>
+            <h1 className="text-2xl font-semibold leading-tight sm:text-3xl">
+              Contract Activity.
+            </h1>
+          </div>
+          <PageHeaderActions
+            address={address}
+            onRefresh={handleRefresh}
+            isRefreshing={isRefreshing}
+            disabled={isRefreshing}
           />
         </div>
-      </main>
 
-      {/* Footer */}
-      <Footer
-        onGet={handleAnother}
-        getAria="Get another receipt."
-        getLabel="Get"
-        onTips={handleTips}
-        tipsAria="Send tips to Prof. NOTA."
-        tipsLabel="Tips"
-        onPin={handleSaveMiniApp}
-        pinAria="Pin MyReceipt mini app."
-        pinLabel="Pin"
-        onShare={handleShare}
-        shareAria="Share receipt of today."
-        shareLabel="Share"
-        sharingLabel="..."
-        isSharing={isSharing}
+        <p className="max-w-xl text-sm leading-relaxed text-neutral-700">
+          This page mirrors on-chain activity for the MyReceiptStamp contract on
+          Base mainnet. It is visible even without a wallet connection.
+        </p>
+      </header>
+
+      <div className="flex flex-wrap gap-2 text-[11px]">
+        <button
+          type="button"
+          onClick={() => setActiveTab("live")}
+          className={toggleButtonClass(
+            activeTab === "live",
+            "rounded-full border px-3 py-1 uppercase tracking-[0.18em]"
+          )}
+        >
+          Live
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("list")}
+          className={toggleButtonClass(
+            activeTab === "list",
+            "rounded-full border px-3 py-1 uppercase tracking-[0.18em]"
+          )}
+        >
+          List
+        </button>
+      </div>
+
+      {activeTab === "live" ? (
+        <LiveTab
+          items={feedItems}
+          loading={feedLoading}
+          error={feedError}
+          page={feedPage}
+          totalPages={totalFeedPages}
+          onPageChange={setFeedPage}
+          onReceiptSelect={handleSelectReceipt}
+        />
+      ) : (
+        <ListTab
+          listItems={listItems}
+          listLoading={listLoading}
+          listError={listError}
+          listPage={listPage}
+          totalListPages={listTotalPages}
+          onPageChange={setListPage}
+          onReceiptSelect={(receipt) => setSelectedReceipt(receipt)}
+        />
+      )}
+
+      <ReceiptModal
+        isOpen={!!selectedReceipt}
+        onClose={() => setSelectedReceipt(null)}
+        receipt={
+          selectedReceipt
+            ? {
+                id: selectedReceipt.id,
+                text: selectedReceipt.text,
+                creator: selectedReceipt.creator,
+                createdAt: selectedReceipt.createdAt,
+              }
+            : null
+        }
+        locked={!address}
       />
-    </div>
+    </section>
   );
 }

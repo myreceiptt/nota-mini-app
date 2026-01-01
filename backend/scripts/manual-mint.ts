@@ -23,7 +23,7 @@ async function main() {
   const receiptId = Number(requireEnv("RECEIPT_ID"));
   const tokenUri = requireEnv("TOKEN_URI");
 
-  const contract = await ethers.getContractAt("ReceiptNFT", nft);
+  const contract = await ethers.getContractAt("MyReceiptNFTs", nft);
   const mintFee = await contract.mintFee();
 
   const tx = await contract.mintFromReceipt(receiptId, tokenUri, {

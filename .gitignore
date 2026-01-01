@@ -44,3 +44,4 @@ next-env.d.ts
 backend/artifacts/
 backend/cache/
 backend/typechain/
+backend/typechain-types/

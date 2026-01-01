@@ -1,4 +1,4 @@
-# Backend Commands (MyReceiptStamp + ReceiptNFT)
+# Backend Commands (MyReceiptStamp + MyReceiptNFTs)
 
 Run all commands from `backend/`.
 

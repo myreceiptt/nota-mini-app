@@ -91,7 +91,7 @@ async function main() {
     );
   }
 
-  const nftInit = await getDeployData("ReceiptNFT", [
+  const nftInit = await getDeployData("MyReceiptNFTs", [
     deployer.address,
     receiptAddress,
     treasury,

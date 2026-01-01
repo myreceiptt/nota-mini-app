@@ -19,7 +19,7 @@ async function main() {
   const receiptAddress = requireEnv("RECEIPT_CONTRACT_ADDRESS");
   const royaltyBps = Number(process.env.NFT_ROYALTY_BPS ?? "500");
 
-  const nftFactory = await ethers.getContractFactory("ReceiptNFT");
+  const nftFactory = await ethers.getContractFactory("MyReceiptNFTs");
   const nft = await nftFactory.deploy(
     deployer.address,
     receiptAddress,

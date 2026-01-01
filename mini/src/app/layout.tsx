@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { SafeArea } from "@coinbase/onchainkit/minikit";
 import { minikitConfig } from "../../minikit.config";
 import { RootProvider } from "@/components/RootProvider";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import "@/styles/globals.css";
 
 // generateMetadata
@@ -55,7 +57,17 @@ export default function RootLayout({
     <RootProvider>
       <html lang="en">
         <body className={`${inter.variable} ${sourceCodePro.variable}`}>
-          <SafeArea>{children}</SafeArea>
+          <SafeArea>
+            <div className="flex min-h-screen flex-col bg-white text-black">
+              <Navbar />
+              <main className="flex-1 bg-white">
+                <div className="mx-auto w-full max-w-5xl px-4 py-10">
+                  {children}
+                </div>
+              </main>
+              <Footer />
+            </div>
+          </SafeArea>
           <Analytics />
         </body>
       </html>

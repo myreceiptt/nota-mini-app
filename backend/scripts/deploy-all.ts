@@ -30,7 +30,7 @@ async function main() {
   await receipt.waitForDeployment();
   const receiptAddress = await receipt.getAddress();
 
-  const nftFactory = await ethers.getContractFactory("ReceiptNFT");
+  const nftFactory = await ethers.getContractFactory("MyReceiptNFTs");
   const nft = await nftFactory.deploy(
     deployer.address,
     receiptAddress,

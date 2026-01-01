@@ -1,120 +1,20 @@
-"use client";
+import Image from "next/image";
 
-import { ReactNode } from "react";
-import { RotateCcw, Download, Pin, Share2 } from "lucide-react";
-import footerStyles from "@/styles/components/Footer.module.css";
-
-type IconButtonProps = {
-  onClick: () => void;
-  icon: ReactNode;
-  label: ReactNode;
-  ariaLabel: string;
-  className: string;
-  disabled?: boolean;
-};
-
-function IconButton({
-  onClick,
-  icon,
-  label,
-  ariaLabel,
-  className,
-  disabled,
-}: IconButtonProps) {
+export function Footer() {
   return (
-    <button
-      type="button"
-      className={className}
-      onClick={onClick}
-      aria-label={ariaLabel}
-      disabled={disabled}
-    >
-      {icon}
-      {label}
-    </button>
-  );
-}
-
-type FooterProps = {
-  onGet: () => void;
-  getAria: string;
-  getLabel: string;
-  onTips: () => void;
-  tipsAria: string;
-  tipsLabel: string;
-  onPin: () => void;
-  pinAria: string;
-  pinLabel: string;
-  onShare: () => void;
-  shareAria: string;
-  shareLabel: string;
-  sharingLabel: string;
-  isSharing?: boolean;
-};
-
-export function Footer({
-  onGet,
-  getAria,
-  getLabel,
-  onTips,
-  tipsAria,
-  tipsLabel,
-  onPin,
-  pinAria,
-  pinLabel,
-  onShare,
-  shareAria,
-  shareLabel,
-  sharingLabel,
-  isSharing,
-}: FooterProps) {
-  const sharing = !!isSharing;
-
-  return (
-    <footer className={footerStyles.footer}>
-      <div className={footerStyles.footerInner}>
-        <div className={footerStyles.actions}>
-          <div className={footerStyles.actionRow}>
-            <IconButton
-              onClick={onGet}
-              ariaLabel={getAria}
-              className={footerStyles.iconButton}
-              icon={<RotateCcw className={footerStyles.iconGlyph} />}
-              label={<span className={footerStyles.iconLabel}>{getLabel}</span>}
-            />
-
-            <IconButton
-              onClick={onTips}
-              ariaLabel={tipsAria}
-              className={footerStyles.iconButton}
-              icon={<Download className={footerStyles.iconGlyph} />}
-              label={
-                <span className={footerStyles.iconLabel}>{tipsLabel}</span>
-              }
-            />
-
-            <IconButton
-              onClick={onPin}
-              ariaLabel={pinAria}
-              className={footerStyles.iconButton}
-              icon={<Pin className={footerStyles.iconGlyph} />}
-              label={<span className={footerStyles.iconLabel}>{pinLabel}</span>}
-            />
-
-            <IconButton
-              onClick={onShare}
-              ariaLabel={shareAria}
-              className={`${footerStyles.iconButton} ${footerStyles.primaryAction}`}
-              icon={<Share2 className={footerStyles.iconGlyph} />}
-              label={
-                <span className={footerStyles.iconLabel}>
-                  {sharing ? sharingLabel : shareLabel}
-                </span>
-              }
-              disabled={sharing}
-            />
-          </div>
-        </div>
+    <footer className="border-t border-black bg-white">
+      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-2 px-4 py-3 text-xs text-neutral-700 sm:flex-row">
+        <span>© {new Date().getFullYear()} Prof. NOTA Inc.</span>
+        <span className="flex items-center gap-2">
+          <Image
+            src="/icon.png"
+            alt="logo"
+            width={24}
+            height={24}
+            className="h-6 w-6 rounded-full border border-black object-cover"
+          />
+          <span>$MyReceipt</span>
+        </span>
       </div>
     </footer>
   );
